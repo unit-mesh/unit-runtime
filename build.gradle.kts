@@ -32,6 +32,12 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlin-jupyter-api:0.11.0-337")
 	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.11.0-337")
 
+	// for REPL
+	implementation("mysql:mysql-connector-java:8.0.32")
+	implementation("org.jdbi:jdbi3-core:3.37.1")
+	implementation("org.jdbi:jdbi3-kotlin-sqlobject:3.37.1")
+	implementation("org.jdbi:jdbi3-kotlin:3.37.1")
+
 	// tips: don't add follow deps to project will cause issues
 	compileOnly("org.jetbrains.kotlin:kotlin-scripting-jvm:1.8.20-Beta")
 

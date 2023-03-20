@@ -49,4 +49,38 @@ fun main(args: Array<String>) {
 }
         """.trimIndent())
     }
+
+    @Test
+    internal fun mysql_connector_demo() {
+        compiler.eval("""import java.sql.*
+
+fun main() {
+    val url = "jdbc:mysql://localhost:3306/test"
+    val username = "root"
+    val password = "prisma"
+
+    try {
+        // Load the JDBC driver
+        Class.forName("com.mysql.cj.jdbc.Driver")
+
+        // Establish the connection
+        val conn = DriverManager.getConnection(url, username, password)
+
+        // Print a message indicating that the connection was successful
+        println("Connected to the database")
+
+        // Close the connection
+        conn.close()
+    } catch (e: SQLException) {
+        // Handle any SQL errors
+        println("SQLException: ${"$"}{e.message}")
+    } catch (e: ClassNotFoundException) {
+        // Handle any errors in loading the JDBC driver
+        println("ClassNotFoundException: ${"$"}{e.message}")
+    }
+}
+
+main()
+""")
+    }
 }
