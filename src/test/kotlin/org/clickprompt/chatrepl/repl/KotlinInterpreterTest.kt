@@ -24,16 +24,28 @@ class KotlinInterpreterTest {
     @Test
     internal fun spring_helloworld() {
         compiler.eval("""
+package org.clickprompt.springbootkotlin            
+            
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
 
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+
 @RestController
 class HelloController {
- 
     @GetMapping("/hello")
     fun helloKotlin(): String {
         return "hello world"
     }
+}
+
+@SpringBootApplication
+class KotlinDemoApplication
+
+fun main(args: Array<String>) {
+    SpringApplication.run(KotlinDemoApplication::class.java, *args)
 }
         """.trimIndent())
     }
