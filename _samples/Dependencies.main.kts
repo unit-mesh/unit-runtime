@@ -1,7 +1,8 @@
-@file:DependsOn("org.springframework.boot:spring-boot-starter-webflux:3.0.4")
-@file:DependsOn("org.springframework.boot:spring-boot-starter-web:3.0.4")
-@file:DependsOn("ch.qos.logback:logback-classic:1.4.6")
-@file:DependsOn("org.slf4j:slf4j-api:2.0.7")
+// SLf4j 1.7 can accidentially be pulled in using Spring Boot 3 leading to exceptions
+// https://github.com/spring-projects/spring-boot/issues/33854
+@file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
+//@file:DependsOn("org.slf4j:slf4j-api:2.0.7")
+//@file:DependsOn("ch.qos.logback:logback-classic:1.4.6")
 
 import org.springframework.boot.*
 import org.springframework.boot.autoconfigure.*
@@ -19,13 +20,8 @@ class HelloController {
 @SpringBootApplication
 open class ReplApplication
 
-fun main() {
-    val app = SpringApplication(ReplApplication::class.java)
-    app.setDefaultProperties(
-        Collections
-            .singletonMap<String, Any>("server.port", "8083")
-    )
-    app.run()
+fun main(args: Array<String>) {
+    SpringApplication(ReplApplication::class.java).run(*args)
 }
 
-main()
+main(arrayOf("server.port=8083"))
