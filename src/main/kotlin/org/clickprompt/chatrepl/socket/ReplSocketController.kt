@@ -7,6 +7,7 @@ import org.clickprompt.chatrepl.repl.api.InterpreterRequest
 import org.clickprompt.chatrepl.repl.KotlinInterpreter
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.CrossOrigin
 import javax.websocket.OnClose
 import javax.websocket.OnError
 import javax.websocket.OnMessage
@@ -18,7 +19,7 @@ object ReplService {
     var interpreter: KotlinInterpreter = KotlinInterpreter()
 }
 
-@ServerEndpoint(value = "/api/repl")
+@ServerEndpoint("/repl")
 @Controller
 class ReplSocketController {
     private val logger = LoggerFactory.getLogger(this.javaClass)
