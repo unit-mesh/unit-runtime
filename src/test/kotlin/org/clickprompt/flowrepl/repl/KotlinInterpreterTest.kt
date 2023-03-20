@@ -24,7 +24,7 @@ class KotlinInterpreterTest {
     @Test
     internal fun spring_helloworld() {
         compiler.eval("""
-package org.clickprompt.springbootkotlin            
+package org.clickprompt.springbootkotlin      
             
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+import java.util.*
 
 @RestController
 class HelloController {
@@ -42,11 +43,18 @@ class HelloController {
 }
 
 @SpringBootApplication
-class KotlinDemoApplication
+open class ReplApplication
 
 fun main(args: Array<String>) {
-    SpringApplication.run(KotlinDemoApplication::class.java, *args)
+    val app = SpringApplication(ReplApplication::class.java)
+    app.setDefaultProperties(
+        Collections
+            .singletonMap<String, Any>("server.port", "8083")
+    )
+    app.run()
 }
+
+main(arrayOf())
         """.trimIndent())
     }
 
