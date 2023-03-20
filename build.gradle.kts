@@ -36,6 +36,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
+	testImplementation(libs.bundles.test)
 }
 
 tasks.withType<KotlinCompile> {

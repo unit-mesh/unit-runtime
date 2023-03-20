@@ -10,6 +10,8 @@ kotlinTest = "5.5.4"
 mockk = "1.13.3"
 assertj = "3.22.0"
 
+kotest = "5.5.4"
+
 [libraries]
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -28,6 +30,9 @@ test-junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine"
 test-kotlintest-assertions = { module = "io.kotest:kotest-assertions-core", version.ref = "kotlinTest" }
 test-mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 test-assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
+
+kotest-core = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
+kotest-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
