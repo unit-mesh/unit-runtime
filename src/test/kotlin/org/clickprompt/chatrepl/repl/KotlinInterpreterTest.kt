@@ -20,4 +20,21 @@ class KotlinInterpreterTest {
         val res = compiler.eval("x*2")
         res.rawValue shouldBe 6
     }
+
+    @Test
+    internal fun spring_helloworld() {
+        compiler.eval("""
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
+@RestController
+class HelloController {
+ 
+    @GetMapping("/hello")
+    fun helloKotlin(): String {
+        return "hello world"
+    }
+}
+        """.trimIndent())
+    }
 }
