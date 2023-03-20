@@ -40,7 +40,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.*
 
 @RestController
-class HelloController {
+class SampleController {
     @GetMapping("/hello")
     fun helloKotlin(): String {
         return "hello world"
