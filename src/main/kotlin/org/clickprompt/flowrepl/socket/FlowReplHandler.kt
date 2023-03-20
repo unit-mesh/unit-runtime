@@ -12,14 +12,10 @@ import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
 
-object ReplService {
-    var interpreter: KotlinInterpreter = KotlinInterpreter()
-}
-
 class FlowReplHandler : WebSocketHandler {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private var replServer: KotlinInterpreter = ReplService.interpreter
+    private var replServer: KotlinInterpreter = KotlinInterpreter()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         logger.info("onOpen WebSocket")
