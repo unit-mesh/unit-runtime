@@ -7,6 +7,7 @@ we are currently working on poc of ChatREPL, which will be released soon.  will 
 Plan support languages:
 
 - [ ] Kotlin
+- [ ] Java
 - [ ] Python
 - [ ] JavaScript
 
