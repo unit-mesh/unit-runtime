@@ -1,7 +1,9 @@
 // SLf4j 1.7 can accidentially be pulled in using Spring Boot 3 leading to exceptions
 // https://github.com/spring-projects/spring-boot/issues/33854
 @file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
-//@file:DependsOn("ch.qos.logback:logback-classic:1.4.6")
+// logging.level.org.springframework.boot.autoconfigure=INFO
+//@file:CompilerOptions("-jvm-target", "1.8", "-Xabi-stability=unstable")
+//@file:DependsOn("ch.qos.logback:logback-classic:1.3.4", options = ["transitive=false"])
 //@file:DependsOn("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 package sample
 
