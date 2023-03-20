@@ -6,10 +6,45 @@ we are currently working on poc of ChatREPL, which will be released soon.  will 
 
 Plan support languages:
 
-- [ ] Kotlin
+- [x] Kotlin
 - [ ] Java
 - [ ] Python
 - [ ] JavaScript
+
+## Development
+
+1. git clone `https://github.com/prompt-engineering/ChatREPL`
+2. `./gradlew bootRun`
+
+API:
+
+### Websocket
+
+server: `ws://localhost:8080/repl`
+
+input: 
+
+```kotlin
+@Serializable
+data class InterpreterRequest(
+    var id: Int = -1,
+    val code: String
+)
+```
+
+output: 
+
+```kotlin
+@Serializable
+data class Message(
+    var id: Int = -1,
+    var resultValue: String,
+    var className: String = "",
+    var msgType: MessageType = MessageType.NONE,
+    var content: MessageContent? = null,
+)
+```
+
 
 ## LICENSE
 
