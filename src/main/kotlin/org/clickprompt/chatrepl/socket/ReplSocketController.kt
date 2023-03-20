@@ -18,9 +18,9 @@ object ReplService {
     var interpreter: KotlinInterpreter = KotlinInterpreter()
 }
 
-@ServerEndpoint(value = "/ascode")
+@ServerEndpoint(value = "/api/repl")
 @Controller
-class AsCodeSocketController {
+class ReplSocketController {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     private var replServer: KotlinInterpreter = ReplService.interpreter
@@ -37,7 +37,6 @@ class AsCodeSocketController {
 
     @OnMessage
     fun onMessage(message: String, session: Session) {
-        // todo: split by languages
         val request: InterpreterRequest = Json.decodeFromString(message)
         val result = replServer.eval(request)
         session.asyncRemote.sendText(Json.encodeToString(result))
