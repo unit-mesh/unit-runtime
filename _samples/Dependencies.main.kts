@@ -21,7 +21,7 @@ class HelloController {
     }
 }
 
-@ComponentScan(basePackageClasses = [HelloController::class])
+@ComponentScan(basePackages = ["sample"])
 @SpringBootApplication
 open class ReplApplication
 
