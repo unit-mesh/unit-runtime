@@ -10,18 +10,20 @@ package sample
 import org.springframework.boot.*
 import org.springframework.boot.autoconfigure.*
 import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
 import org.springframework.web.bind.annotation.*
 import java.util.*
 
 @RestController
-class HelloController {
+class LocalSampleController {
     @GetMapping("/hello")
     fun helloKotlin(): String {
         return "hello world"
     }
 }
 
-@ComponentScan(basePackages = ["sample"])
+@Configuration
+@ComponentScan(basePackageClasses = [LocalSampleController::class])
 @SpringBootApplication
 open class ReplApplication
 

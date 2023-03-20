@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.file.Paths
 import java.util.*
 
 @RestController
@@ -57,6 +58,14 @@ fun main(args: Array<String>) {
 }
 
 main(arrayOf("--server.port=8083"))
+
+println("....")
+
+val path = Paths.get("").toAbsolutePath().toString()       
+println(path)
+
+%trackClasspath
+%trackExecution generated
 """.trimIndent())
     }
 
