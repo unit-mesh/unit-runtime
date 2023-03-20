@@ -15,7 +15,7 @@ class KotlinInterpreter  {
 
     fun eval(interpreterRequest: InterpreterRequest): Message {
         try {
-            val result = compiler.eval(interpreterRequest.code, interpreterRequest.id)
+            val result = compiler.eval(interpreterRequest.code, interpreterRequest.id, false)
             return convertResult(result, interpreterRequest.id)
         } catch (e: Exception) {
             logger.error(e.toString())

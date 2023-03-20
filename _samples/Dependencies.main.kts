@@ -11,10 +11,13 @@ import org.springframework.boot.*
 import org.springframework.boot.autoconfigure.*
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping
 import java.util.*
 
-@RestController
+@Controller
 class LocalSampleController {
     @GetMapping("/hello")
     fun helloKotlin(): String {
@@ -28,7 +31,19 @@ class LocalSampleController {
 open class ReplApplication
 
 fun main(args: Array<String>) {
-    SpringApplication(ReplApplication::class.java).run(*args)
+    val application = runApplication<ReplApplication>(*args)
+    val bean = application.getBean(RequestMappingHandlerMapping::class.java)
+
+    val requestMappingInfo = RequestMappingInfo
+        .paths("/hello")
+        .methods(RequestMethod.GET)
+        .build()
+
+    bean.registerMapping(
+        requestMappingInfo,
+        "testRequest",
+        LocalSampleController::class.java.getDeclaredMethod("helloKotlin", String::class.java)
+    )
 }
 
 main(arrayOf("--server.port=8083"))
