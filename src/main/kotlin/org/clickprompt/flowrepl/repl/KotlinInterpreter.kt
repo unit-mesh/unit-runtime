@@ -13,14 +13,14 @@ class KotlinInterpreter  {
     private var compiler: KotlinReplWrapper = KotlinReplWrapper()
     private val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
-    fun eval(interpreterRequest: InterpreterRequest): Message {
+    fun eval(request: InterpreterRequest): Message {
         try {
-            val result = compiler.eval(interpreterRequest.code, interpreterRequest.id, false)
-            return convertResult(result, interpreterRequest.id)
+            val result = compiler.eval(request.code, request.id, request.history)
+            return convertResult(result, request.id)
         } catch (e: Exception) {
             logger.error(e.toString())
             val content = ErrorContent(e.javaClass.name, e.toString())
-            return Message(interpreterRequest.id, "", "", MessageType.ERROR, content = content)
+            return Message(request.id, "", "", MessageType.ERROR, content = content)
         }
     }
 

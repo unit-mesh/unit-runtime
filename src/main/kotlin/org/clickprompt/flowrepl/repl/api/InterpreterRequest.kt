@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class InterpreterRequest(
     var id: Int = -1,
-    val code: String
+    val code: String,
+    val history: Boolean = false
 )
