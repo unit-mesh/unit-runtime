@@ -1,7 +1,6 @@
 package org.clickprompt.chatrepl.repl.messaging
 
 import kotlinx.serialization.Serializable
-import org.archguard.dsl.base.model.ReactiveAction
 
 @Serializable
 data class Message(
@@ -10,5 +9,4 @@ data class Message(
     var className: String = "",
     var msgType: MessageType = MessageType.NONE,
     var content: MessageContent? = null,
-    var action: ReactiveAction? = null,
 )

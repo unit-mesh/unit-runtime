@@ -4,7 +4,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.clickprompt.chatrepl.repl.api.InterpreterRequest
-import org.clickprompt.chatrepl.ArchdocInterpreter
+import org.clickprompt.chatrepl.repl.KotlinInterpreter
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import javax.websocket.OnClose
@@ -15,7 +15,7 @@ import javax.websocket.Session
 import javax.websocket.server.ServerEndpoint
 
 object ReplService {
-    var interpreter: ArchdocInterpreter = ArchdocInterpreter()
+    var interpreter: KotlinInterpreter = KotlinInterpreter()
 }
 
 @ServerEndpoint(value = "/ascode")
@@ -23,7 +23,7 @@ object ReplService {
 class AsCodeSocketController {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private var replServer: ArchdocInterpreter = ReplService.interpreter
+    private var replServer: KotlinInterpreter = ReplService.interpreter
 
     @OnOpen
     fun onOpen(session: Session) {
