@@ -6,6 +6,7 @@ plugins {
 	id("org.graalvm.buildtools.native") version "0.9.20"
 	kotlin("jvm") version "1.7.22"
 	kotlin("plugin.spring") version "1.7.22"
+	id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-337"
 }
 
 group = "org.clickprompt"
@@ -22,6 +23,12 @@ dependencies {
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+
+	implementation("org.springframework.boot:spring-boot-starter-websocket")
+
+	implementation("org.jetbrains.kotlinx:kotlin-jupyter-api:0.11.0-337")
+	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.11.0-337")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
