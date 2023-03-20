@@ -23,15 +23,20 @@ class KotlinInterpreterTest {
 
     @Test
     internal fun spring_helloworld() {
-        compiler.eval("""
-package org.clickprompt.springbootkotlin      
-            
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
+        compiler.eval("""            
+// SLf4j 1.7 can accidentially be pulled in using Spring Boot 3 leading to exceptions
+// https://github.com/spring-projects/spring-boot/issues/33854
+@file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
+@file:DependsOn("mysql:mysql-connector-java:8.0.32")
 
-import org.springframework.boot.SpringApplication
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+package sample
+
+import org.springframework.boot.*
+import org.springframework.boot.autoconfigure.*
+import org.springframework.web.bind.annotation.*
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
 import java.util.*
 
 @RestController
@@ -42,20 +47,17 @@ class HelloController {
     }
 }
 
+// @Configuration
+// @ComponentScan
 @SpringBootApplication
 open class ReplApplication
 
 fun main(args: Array<String>) {
-    val app = SpringApplication(ReplApplication::class.java)
-    app.setDefaultProperties(
-        Collections
-            .singletonMap<String, Any>("server.port", "8083")
-    )
-    app.run()
+    SpringApplication(ReplApplication::class.java).run(*args)
 }
 
-main(arrayOf())
-        """.trimIndent())
+main(arrayOf("--server.port=8083"))
+""".trimIndent())
     }
 
     @Test
