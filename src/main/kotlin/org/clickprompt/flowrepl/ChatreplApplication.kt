@@ -2,11 +2,23 @@ package org.clickprompt.flowrepl
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.stereotype.Controller
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+
+@Controller
+@RequestMapping("")
+class HelloController {
+    @GetMapping("/hello")
+    fun helloKotlin(): String {
+        return "hello world"
+    }
+}
 
 @SpringBootApplication
 class ChatreplApplication
 
 fun main(args: Array<String>) {
-    runApplication<ChatreplApplication>(*args)
+    val application = runApplication<ChatreplApplication>(*args)
 }
 
