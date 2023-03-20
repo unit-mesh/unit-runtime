@@ -1,15 +1,14 @@
 // SLf4j 1.7 can accidentially be pulled in using Spring Boot 3 leading to exceptions
 // https://github.com/spring-projects/spring-boot/issues/33854
 @file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
-@file:DependsOn("org.slf4j:slf4j-api:2.0.7")
 //@file:DependsOn("ch.qos.logback:logback-classic:1.4.6")
+//@file:DependsOn("org.apache.logging.log4j:log4j-slf4j-impl:2.20.0")
 package sample
 
 import org.springframework.boot.*
 import org.springframework.boot.autoconfigure.*
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.web.bind.annotation.*
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import java.util.*
 
 @RestController

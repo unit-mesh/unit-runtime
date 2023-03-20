@@ -37,7 +37,14 @@ class KotlinReplWrapper {
 //            }
 //        }
 
-        embeddedClasspath = embeddedClasspath.distinctBy { it.name } as MutableList<File>
+        embeddedClasspath = embeddedClasspath.distinctBy { it.name }
+            .filter {
+                // remove `logback-classic-1.2.11.jar` from classpath
+                // because it conflicts with `logback-classic-1.2.3.jar` from `kotlinx-jupyter-core`
+                !(it.name.startsWith("logback-classic-") && it.name.endsWith(".jar"))
+            }
+                as MutableList<File>
+
         logger.info("classpath: $embeddedClasspath")
 
         return createRepl(
