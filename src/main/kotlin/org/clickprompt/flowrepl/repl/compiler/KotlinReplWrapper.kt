@@ -1,4 +1,4 @@
-package org.clickprompt.chatrepl.repl.compiler
+package org.clickprompt.flowrepl.repl.compiler
 
 import org.clickprompt.chatrepl.compiler.toLibraries
 import org.jetbrains.kotlinx.jupyter.EvalRequestData

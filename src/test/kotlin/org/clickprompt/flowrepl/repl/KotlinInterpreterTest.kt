@@ -1,7 +1,7 @@
-package org.clickprompt.chatrepl.repl
+package org.clickprompt.flowrepl.repl
 
 
-import org.clickprompt.chatrepl.repl.compiler.KotlinReplWrapper
+import org.clickprompt.flowrepl.repl.compiler.KotlinReplWrapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.shouldBe

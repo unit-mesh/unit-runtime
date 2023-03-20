@@ -1,4 +1,4 @@
-package org.clickprompt.chatrepl.socket
+package org.clickprompt.flowrepl.socket
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.socket.config.annotation.EnableWebSocket
@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration @EnableWebSocket
 class WSConfig : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(ReplHandler(), "/repl")
+        registry.addHandler(FlowReplHandler(), "/repl")
             .setAllowedOriginPatterns("*")
     }
 }

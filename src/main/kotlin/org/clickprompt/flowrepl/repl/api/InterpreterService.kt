@@ -1,6 +1,6 @@
-package org.clickprompt.chatrepl.repl.api
+package org.clickprompt.flowrepl.repl.api
 
-import org.clickprompt.chatrepl.repl.messaging.Message
+import org.clickprompt.flowrepl.repl.messaging.Message
 
 interface InterpreterService {
     fun eval(interpreterRequest: InterpreterRequest): Message

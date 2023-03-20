@@ -1,4 +1,4 @@
-package org.clickprompt.chatrepl
+package org.clickprompt.flowrepl
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

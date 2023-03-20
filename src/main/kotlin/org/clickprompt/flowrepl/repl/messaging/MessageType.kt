@@ -1,4 +1,4 @@
-package org.clickprompt.chatrepl.repl.messaging
+package org.clickprompt.flowrepl.repl.messaging
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName

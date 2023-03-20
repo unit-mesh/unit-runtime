@@ -1,10 +1,10 @@
-package org.clickprompt.chatrepl.repl
+package org.clickprompt.flowrepl.repl
 
-import org.clickprompt.chatrepl.repl.api.InterpreterRequest
-import org.clickprompt.chatrepl.repl.messaging.ErrorContent
-import org.clickprompt.chatrepl.repl.messaging.Message
-import org.clickprompt.chatrepl.repl.messaging.MessageType
-import org.clickprompt.chatrepl.repl.compiler.KotlinReplWrapper
+import org.clickprompt.flowrepl.repl.api.InterpreterRequest
+import org.clickprompt.flowrepl.repl.messaging.ErrorContent
+import org.clickprompt.flowrepl.repl.messaging.Message
+import org.clickprompt.flowrepl.repl.messaging.MessageType
+import org.clickprompt.flowrepl.repl.compiler.KotlinReplWrapper
 import org.jetbrains.kotlinx.jupyter.repl.EvalResultEx
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
