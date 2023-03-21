@@ -7,7 +7,6 @@
 @file:DependsOn("io.kotless:spring-boot-lang-local:0.2.0")
 @file:DependsOn("io.kotless:spring-lang-parser:0.2.0")
 
-import io.kotless.Constants
 import io.kotless.dsl.spring.Kotless
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

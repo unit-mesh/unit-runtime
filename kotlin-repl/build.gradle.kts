@@ -36,9 +36,16 @@ dependencies {
 
 	// Serverless Kotlin Language Binding
 	implementation("io.kotless:kotless-lang:0.2.0")
+	implementation("io.kotless:kotless-lang-local:0.2.0")
+
+	// Serverless Kotlin Spring
 	implementation("io.kotless:spring-boot-lang:0.2.0")
 	implementation("io.kotless:spring-boot-lang-local:0.2.0")
 	implementation("io.kotless:spring-lang-parser:0.2.0")
+
+	// Serverless Kotlin Ktor
+	implementation("io.kotless:ktor-lang:0.2.0")
+	implementation("io.kotless:ktor-lang-local:0.2.0")
 
 	// for REPL
 	implementation("mysql:mysql-connector-java:8.0.32")
