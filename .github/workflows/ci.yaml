@@ -17,12 +17,15 @@ jobs:
           java-version: '17'
 
       - name: Setup Gradle
+        working-directory: kotlin-repl
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle build
+        working-directory: kotlin-repl
         run: ./gradlew build
 
       - name: Execute Gradle Coverage
+        working-directory: kotlin-repl
         run: ./gradlew check
 
       - name: Execute Gradle Coverage
