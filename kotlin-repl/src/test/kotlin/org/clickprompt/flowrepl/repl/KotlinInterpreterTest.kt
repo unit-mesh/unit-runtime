@@ -24,20 +24,12 @@ class KotlinInterpreterTest {
     }
 
     @Test
-    internal fun spring_helloworld() {
+    internal fun spring_hello_world() {
         compiler.eval("""            
-// SLf4j 1.7 can accidentially be pulled in using Spring Boot 3 leading to exceptions
-// https://github.com/spring-projects/spring-boot/issues/33854
-@file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
-@file:DependsOn("mysql:mysql-connector-java:8.0.32")
-
 package sample
 
-import org.springframework.boot.*
-import org.springframework.boot.autoconfigure.*
-import org.springframework.web.bind.annotation.*
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+%use mysql
+%use spring
 
 import java.nio.file.Paths
 import java.util.*
@@ -50,8 +42,7 @@ class SampleController {
     }
 }
 
-// @Configuration
-// @ComponentScan
+@ComponentScan(basePackageClasses = [SampleController::class])
 @SpringBootApplication
 open class ReplApplication
 

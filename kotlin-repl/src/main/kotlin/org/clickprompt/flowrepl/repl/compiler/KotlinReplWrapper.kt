@@ -1,13 +1,34 @@
 package org.clickprompt.flowrepl.repl.compiler
 
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.clickprompt.chatrepl.compiler.toLibraries
 import org.jetbrains.kotlinx.jupyter.EvalRequestData
 import org.jetbrains.kotlinx.jupyter.ReplForJupyter
+import org.jetbrains.kotlinx.jupyter.api.AfterCellExecutionCallback
+import org.jetbrains.kotlinx.jupyter.api.ClassAnnotationHandler
 import org.jetbrains.kotlinx.jupyter.api.Code
+import org.jetbrains.kotlinx.jupyter.api.CodePreprocessor
+import org.jetbrains.kotlinx.jupyter.api.ExecutionCallback
+import org.jetbrains.kotlinx.jupyter.api.FieldHandler
+import org.jetbrains.kotlinx.jupyter.api.FileAnnotationHandler
+import org.jetbrains.kotlinx.jupyter.api.InternalVariablesMarker
+import org.jetbrains.kotlinx.jupyter.api.InterruptionCallback
+import org.jetbrains.kotlinx.jupyter.api.KotlinKernelVersion
+import org.jetbrains.kotlinx.jupyter.api.RendererHandler
+import org.jetbrains.kotlinx.jupyter.api.TextRendererWithPriority
+import org.jetbrains.kotlinx.jupyter.api.ThrowableRenderer
+import org.jetbrains.kotlinx.jupyter.api.libraries.ColorSchemeChangedCallback
+import org.jetbrains.kotlinx.jupyter.api.libraries.KernelRepository
+import org.jetbrains.kotlinx.jupyter.api.libraries.LibraryDefinition
+import org.jetbrains.kotlinx.jupyter.api.libraries.LibraryResource
 import org.jetbrains.kotlinx.jupyter.libraries.EmptyResolutionInfoProvider
 import org.jetbrains.kotlinx.jupyter.libraries.LibraryResolver
 import org.jetbrains.kotlinx.jupyter.messaging.NoOpDisplayHandler
 import org.jetbrains.kotlinx.jupyter.repl.creating.createRepl
+import org.jetbrains.kotlinx.jupyter.util.AcceptanceRule
 import org.slf4j.LoggerFactory
 import java.io.File
 
@@ -84,17 +105,94 @@ class KotlinReplWrapper {
 
     companion object {
         fun resolveArchGuardDsl(): LibraryResolver {
-            val lib = "spring" to """
-            {
-                "imports": [
-                    "org.springframework.*"
-                ],
-                "init": []
-            }
-                """.trimIndent()
+            val springLibs = Json.encodeToString(
+                SimpleLibraryDefinition(
+                    imports = listOf(
+                        "org.springframework.boot.*",
+                        "org.springframework.boot.autoconfigure.*",
+                        "org.springframework.web.bind.annotation.*",
+                        "org.springframework.context.annotation.ComponentScan",
+                        "org.springframework.context.annotation.Configuration"
+                    ),
+                    dependencies = listOf(
+                        "org.springframework.boot:spring-boot-starter-web:2.7.9"
+                    )
+                )
+            )
+            val spring = "spring" to springLibs
 
-            return listOf(lib).toLibraries()
+            val mysql = "mysql" to Json.encodeToString(
+                SimpleLibraryDefinition(dependencies = listOf("mysql:mysql-connector-java:8.0.32"))
+            )
+
+            return listOf(spring, mysql).toLibraries()
         }
     }
 }
 
+@Serializable
+class SimpleLibraryDefinition(
+    override var imports: List<String> = emptyList(),
+    override var dependencies: List<String> = emptyList()
+) : LibraryDefinition {
+    @Transient
+    override var options: Map<String, String> = emptyMap()
+
+    @Transient
+    override var repositories: List<KernelRepository> = emptyList()
+
+    @Transient
+    override var init: List<ExecutionCallback<*>> = emptyList()
+
+    @Transient
+    override var initCell: List<ExecutionCallback<*>> = emptyList()
+
+    @Transient
+    override var afterCellExecution: List<AfterCellExecutionCallback> = emptyList()
+
+    @Transient
+    override var shutdown: List<ExecutionCallback<*>> = emptyList()
+
+    @Transient
+    override var renderers: List<RendererHandler> = emptyList()
+
+    @Transient
+    override var textRenderers: List<TextRendererWithPriority> = emptyList()
+
+    @Transient
+    override var throwableRenderers: List<ThrowableRenderer> = emptyList()
+
+    @Transient
+    override var converters: List<FieldHandler> = emptyList()
+
+    @Transient
+    override var classAnnotations: List<ClassAnnotationHandler> = emptyList()
+
+    @Transient
+    override var fileAnnotations: List<FileAnnotationHandler> = emptyList()
+
+    @Transient
+    override var resources: List<LibraryResource> = emptyList()
+
+    @Transient
+    override var codePreprocessors: List<CodePreprocessor> = emptyList()
+
+    @Transient
+    override var internalVariablesMarkers: List<InternalVariablesMarker> = emptyList()
+
+    @Transient
+    override var minKernelVersion: KotlinKernelVersion? = null
+
+    @Transient
+    override var originalDescriptorText: String? = null
+
+    @Transient
+    override var integrationTypeNameRules: List<AcceptanceRule<String>> = emptyList()
+
+    @Transient
+    override var interruptionCallbacks: List<InterruptionCallback> = emptyList()
+
+    @Transient
+    override var colorSchemeChangedCallbacks: List<ColorSchemeChangedCallback> = emptyList()
+
+}
