@@ -32,7 +32,7 @@ class Server : KotlessAWS() {
 
 ## H2
 
-我要实现一个用户注册的功能，请帮我使用 Ktor、Exposed、H2 JDBC，实现这个 RESTful API：
+我要实现一个用户注册的功能，请帮我使用 Ktor、Exposed 实现这个 RESTful API，要求如下：
 
 1. 帮我设计一个 API，需要考虑 JSON 格式的输入和输出数据，放在代码的注释里，格式如后面的代码。
 2. 你只返回给我一个 Server 类，我会自动部署到 AWS Lambda 上

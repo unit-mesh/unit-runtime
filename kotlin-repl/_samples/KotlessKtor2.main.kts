@@ -6,54 +6,60 @@
 @file:DependsOn("io.kotless:ktor-lang:0.2.0")
 @file:DependsOn("io.kotless:ktor-lang-local:0.2.0")
 
+@file:DependsOn("com.h2database:h2:2.1.212")
+
+@file:DependsOn("org.jetbrains.exposed:exposed-core:0.40.1")
+@file:DependsOn("org.jetbrains.exposed:exposed-dao:0.40.1")
+@file:DependsOn("org.jetbrains.exposed:exposed-jdbc:0.40.1")
+
 import io.kotless.dsl.ktor.KotlessAWS
+import kotlin.reflect.full.primaryConstructor
+
 import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import java.sql.*
-import kotlin.reflect.full.primaryConstructor
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
 
-/**
- * features: User Registration
- * POST /register
- * input: { "username": "user", "password": "password" }
- * output: { "id": 1, "username": "user" }
- */
+data class User(val id: Int, val username: String)
+
 class Server : KotlessAWS() {
     override fun prepare(app: Application) {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            SchemaUtils.create(Users)
+        }
+
         app.routing {
             post("/register") {
-                val input = call.receive<RegisterInput>()
-                val userId = insertUser(input.username, input.password)
-                call.respond(RegisterOutput(userId, input.username))
-            }
-        }
-    }
+                val user = call.receive<User>()
+                val id = transaction {
+                    // Insert the new user into the database
+                    Users.insert {
+                        it[username] = user.username
+                    } get Users.id
+                }
 
-    data class RegisterInput(val username: String, val password: String)
-    data class RegisterOutput(val id: Int, val username: String)
-
-    companion object {
-        fun insertUser(username: String, password: String): Int {
-            val connectionUrl = System.getenv("DATABASE_URL")
-            DriverManager.getConnection(connectionUrl).use { connection ->
-                val statement = connection.prepareStatement(
-                    "INSERT INTO users (username, password) VALUES (?, ?)",
-                    Statement.RETURN_GENERATED_KEYS
-                )
-                statement.setString(1, username)
-                statement.setString(2, password)
-                statement.executeUpdate()
-                val generatedKeys = statement.generatedKeys
-                generatedKeys.next()
-                return generatedKeys.getInt(1)
+                val newUser = User(id, user.username)
+                call.respond(newUser)
             }
         }
     }
 }
+
+object Users : org.jetbrains.exposed.sql.Table("users") {
+    val id = integer("id").autoIncrement()
+    val username = varchar("username", 50).uniqueIndex()
+
+    override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
+}
+
 
 fun main(port: Int) {
     val classToStart = Server::class.java.name
