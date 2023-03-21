@@ -17,12 +17,14 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 
 repositories {
 	mavenCentral()
+	maven(url = uri("https://packages.jetbrains.team/maven/p/ktls/maven"))
 }
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
@@ -31,6 +33,12 @@ dependencies {
 
 	implementation("org.jetbrains.kotlinx:kotlin-jupyter-api:0.11.0-337")
 	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.11.0-337")
+
+	// Serverless Kotlin Language Binding
+	implementation("io.kotless:kotless-lang:0.2.0")
+	implementation("io.kotless:spring-boot-lang:0.2.0")
+	implementation("io.kotless:spring-boot-lang-local:0.2.0")
+	implementation("io.kotless:spring-lang-parser:0.2.0")
 
 	// for REPL
 	implementation("mysql:mysql-connector-java:8.0.32")
