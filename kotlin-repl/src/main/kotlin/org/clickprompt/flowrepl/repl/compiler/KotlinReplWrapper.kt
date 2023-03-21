@@ -3,6 +3,8 @@ package org.clickprompt.flowrepl.repl.compiler
 import org.jetbrains.kotlinx.jupyter.EvalRequestData
 import org.jetbrains.kotlinx.jupyter.ReplForJupyter
 import org.jetbrains.kotlinx.jupyter.api.Code
+import org.jetbrains.kotlinx.jupyter.config.defaultRepositories
+import org.jetbrains.kotlinx.jupyter.defaultRepositoriesCoordinates
 import org.jetbrains.kotlinx.jupyter.libraries.EmptyResolutionInfoProvider
 import org.jetbrains.kotlinx.jupyter.messaging.NoOpDisplayHandler
 import org.jetbrains.kotlinx.jupyter.repl.creating.createRepl
@@ -48,6 +50,7 @@ class KotlinReplWrapper {
         return createRepl(
             EmptyResolutionInfoProvider,
             embeddedClasspath,
+            mavenRepositories = defaultRepositoriesCoordinates,
             libraryResolver = extendLibraries(),
             displayHandler = NoOpDisplayHandler,
             isEmbedded = true
@@ -81,3 +84,5 @@ class KotlinReplWrapper {
         }
 }
 
+
+open class LocalRepositoryCoordinates(val string: String)

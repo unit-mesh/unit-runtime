@@ -145,10 +145,7 @@ main()""")
 
     @Test
     fun kotless_helloworld2() {
-        compiler.eval(
-            """@file:Repository("https://packages.jetbrains.team/maven/p/ktls/maven")
-@file:Repository("https://repo.maven.apache.org/maven2/")
-
+        compiler.eval("""
 %use kotless
 
 @Get("/")
