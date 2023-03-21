@@ -56,4 +56,4 @@ data class Message(
 
 ## LICENSE
 
-This code is distributed under the MIT license. See [LICENSE](./LICENSE) in this directory.
+This code is distributed under the MIT license. See [LICENSE](kotlin-repl/LICENSE) in this directory.
