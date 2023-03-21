@@ -5,6 +5,8 @@ import org.clickprompt.flowrepl.repl.compiler.KotlinReplWrapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.shouldBe
+import io.kotless.dsl.spring.Kotless
+import org.junit.jupiter.api.Disabled
 
 class KotlinInterpreterTest {
     private lateinit var compiler: KotlinReplWrapper
@@ -59,11 +61,6 @@ fun main(args: Array<String>) {
 
 main(arrayOf("--server.port=8083"))
 
-println("....")
-
-val path = Paths.get("").toAbsolutePath().toString()       
-println(path)
-
 %trackClasspath
 %trackExecution generated
 """.trimIndent())
@@ -101,5 +98,57 @@ fun main() {
 
 main()
 """)
+    }
+
+    @Test
+    @Disabled
+    fun kotless_helloworld() {
+        compiler.eval("""@file:Repository("https://packages.jetbrains.team/maven/p/ktls/maven")
+@file:Repository("https://repo.maven.apache.org/maven2/")
+
+@file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
+@file:DependsOn("io.kotless:kotless-lang:0.2.0")
+@file:DependsOn("io.kotless:spring-boot-lang:0.2.0")
+@file:DependsOn("io.kotless:spring-boot-lang-local:0.2.0")
+@file:DependsOn("io.kotless:spring-lang-parser:0.2.0")
+
+import io.kotless.Constants
+import io.kotless.dsl.spring.Kotless
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import kotlin.reflect.KClass
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+import kotlin.reflect.full.primaryConstructor
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+
+@RestController
+object Pages {
+    @GetMapping("/")
+    fun main() = "Hello World!"
+}
+
+@ComponentScan(basePackageClasses = [Pages::class])
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
+fun main() {
+    val port = 8080
+    val classToStart = Application::class.java.name
+
+    val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
+    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
+
+    val kotless = instance ?: error("The entry point ${"$"}classToStart does not inherit from ${Kotless::class.qualifiedName}!")
+
+    val app = SpringApplication(kotless.bootKlass.java)
+    app.setDefaultProperties(mapOf("server.port" to port.toString()))
+    app.run()
+}
+
+main()""")
     }
 }
