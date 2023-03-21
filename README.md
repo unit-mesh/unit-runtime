@@ -13,9 +13,11 @@ Plan support languages:
     - [x] basic REPL
     - [ ] Spring Boot framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
     - [ ] Ktor framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
+- [x] TypeScript
+    - [x] basic REPL 
+    - [x] Deno with Hono
 - [ ] Java
 - [ ] Python
-- [ ] JavaScript
 
 ## Development
 
