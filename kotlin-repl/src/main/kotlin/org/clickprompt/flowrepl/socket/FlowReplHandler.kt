@@ -15,9 +15,11 @@ import org.springframework.web.socket.WebSocketSession
 class FlowReplHandler : WebSocketHandler {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    private var replServer: KotlinInterpreter = KotlinInterpreter()
+    private lateinit var replServer: KotlinInterpreter
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
+        // Todo: find a way to inject the replServer, when connect
+        replServer = KotlinInterpreter()
         logger.info("onOpen WebSocket")
     }
 

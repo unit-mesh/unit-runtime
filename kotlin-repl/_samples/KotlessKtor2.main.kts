@@ -60,7 +60,6 @@ object Users : org.jetbrains.exposed.sql.Table("users") {
     override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
 }
 
-
 fun main(port: Int) {
     val classToStart = Server::class.java.name
 
