@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class InterpreterRequest(
     var id: Int = -1,
     val code: String,
+    val language: String = "kotlin",
     val history: Boolean = false
 )
