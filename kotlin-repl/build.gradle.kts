@@ -47,6 +47,12 @@ dependencies {
 	implementation("io.kotless:ktor-lang:0.2.0")
 	implementation("io.kotless:ktor-lang-local:0.2.0")
 
+	// Database ORM
+	implementation("com.h2database:h2:2.1.212")
+	implementation("org.jetbrains.exposed", "exposed-core", "0.40.1")
+	implementation("org.jetbrains.exposed", "exposed-dao", "0.40.1")
+	implementation("org.jetbrains.exposed", "exposed-jdbc", "0.40.1")
+
 	// for REPL
 	implementation("mysql:mysql-connector-java:8.0.32")
 	implementation("org.jdbi:jdbi3-core:3.37.1")
