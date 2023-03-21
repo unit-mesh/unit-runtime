@@ -52,18 +52,26 @@ val KotlessLibDef = SimpleLibraryDefinition(
     ).map(::KernelRepository)
 )
 
+val exposedLibDef = SimpleLibraryDefinition(
+    imports = listOf(
+        "org.jetbrains.exposed.sql.*",
+        "org.jetbrains.exposed.sql.transactions.*",
+        "org.jetbrains.exposed.sql.transactions.transaction",
+        "org.jetbrains.exposed.sql.SchemaUtils.*"
+    ),
+    dependencies = listOf(
+        "org.jetbrains.exposed:exposed-core:0.40.1",
+        "org.jetbrains.exposed:exposed-dao:0.40.1",
+        "org.jetbrains.exposed:exposed-jdbc:0.40.1",
+    )
+)
+
+
 fun extendLibraries(): LibraryResolver {
-    val spring = "spring" to Json.encodeToString<SimpleLibraryDefinition>(
-        springLibDef
-    )
-    val mysqlLibs = "mysql" to Json.encodeToString(
-        mysqlLibDef
-    )
+    val spring = "spring" to Json.encodeToString(springLibDef)
+    val mysqlLibs = "mysql" to Json.encodeToString(mysqlLibDef)
+    val kotless = "kotless" to Json.encodeToString(KotlessLibDef)
+    val exposed = "exposed" to Json.encodeToString(exposedLibDef)
 
-    val kotless = "kotless" to Json.encodeToString(
-        KotlessLibDef
-    )
-
-
-    return listOf(spring, mysqlLibs, kotless).toLibraries()
+    return listOf(spring, mysqlLibs, kotless, exposed).toLibraries()
 }

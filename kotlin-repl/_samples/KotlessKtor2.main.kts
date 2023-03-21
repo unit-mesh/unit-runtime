@@ -16,6 +16,7 @@ import kotlin.reflect.full.primaryConstructor
 
 import io.kotless.dsl.ktor.*
 import io.ktor.application.*
+import io.ktor.http.*
 import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
@@ -24,6 +25,8 @@ import io.ktor.server.netty.*
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 data class User(val id: Int, val username: String)
@@ -48,6 +51,38 @@ class Server : KotlessAWS() {
 
                 val newUser = User(id, user.username)
                 call.respond(newUser)
+            }
+
+            get("/users") {
+                val users = transaction {
+                    Users.selectAll().map {
+                        User(it[Users.id], it[Users.username])
+                    }
+                }
+                call.respond(users)
+            }
+
+            // get user by user id
+            get("/users/{id}") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id == null) {
+                    call.respondText("Invalid id", status = HttpStatusCode.BadRequest)
+                    return@get
+                }
+
+                val user = transaction {
+                    Users.select {
+                        Users.id eq id
+                    }.map {
+                        User(it[Users.id], it[Users.username])
+                    }.singleOrNull()
+                }
+
+                if (user == null) {
+                    call.respondText("User $id not found", status = HttpStatusCode.NotFound)
+                } else {
+                    call.respond(user)
+                }
             }
         }
     }
