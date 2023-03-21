@@ -12,9 +12,9 @@
 @file:DependsOn("org.jetbrains.exposed:exposed-dao:0.40.1")
 @file:DependsOn("org.jetbrains.exposed:exposed-jdbc:0.40.1")
 
-import io.kotless.dsl.ktor.KotlessAWS
 import kotlin.reflect.full.primaryConstructor
 
+import io.kotless.dsl.ktor.*
 import io.ktor.application.*
 import io.ktor.request.*
 import io.ktor.response.*

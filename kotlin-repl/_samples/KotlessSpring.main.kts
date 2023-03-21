@@ -10,9 +10,9 @@
 import io.kotless.dsl.spring.Kotless
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import kotlin.reflect.KClass
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.GetMapping
+import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 
