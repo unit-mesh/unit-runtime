@@ -1,0 +1,10 @@
+{
+    "imports": {
+        "@std/": "https://deno.land/std@0.158.0/",
+        "hono": "https://deno.land/x/hono@v3.1.2/mod.ts",
+        "logger": "https://deno.land/x/logger@v1.0.2/logger.ts"
+    },
+    "tasks": {
+        "start": "deno run --allow-net --allow-env --allow-read --allow-write --unstable main.ts"
+    }
+}
