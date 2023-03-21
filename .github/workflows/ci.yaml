@@ -17,16 +17,18 @@ jobs:
           java-version: '17'
 
       - name: Setup Gradle
-        working-directory: kotlin-repl
         uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+          build-root-directory: kotlin-repl
 
       - name: Execute Gradle build
-        working-directory: kotlin-repl
         run: ./gradlew build
+        working-directory: kotlin-repl
 
       - name: Execute Gradle Coverage
-        working-directory: kotlin-repl
         run: ./gradlew check
+        working-directory: kotlin-repl
 
       - name: Execute Gradle Coverage
         if: runner.os == 'macOS'
