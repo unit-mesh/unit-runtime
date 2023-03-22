@@ -95,3 +95,36 @@ class Server : KotlessAWS() {
     }
 }
 ```
+
+# English Version
+
+
+Please help me implement the core part of a user registration RESTful API using Ktor + Kotlin + Exposed, with the following requirements:
+
+1. Use Database.connect directly when dealing with the database.
+2. Do not `import` packages or use any `import` syntax in the code. I will import them
+3. Only return the classes to the Server class, which I will automatically deploy to AWS Lambda.
+
+Finally, only return all classes. The code format is as follows:
+
+```kotlin
+class Server : KotlessAWS() {
+    override fun prepare(app: Application) {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver", user = "root", password = "")
+        transaction {
+            SchemaUtils.create(Users)
+        }
+
+        app.routing {
+            get("/users") {
+                val users = transaction {
+                    Users.selectAll().map {
+                        User(it[Users.id], it[Users.username])
+                    }
+                }
+                call.respond(users)
+            }
+        }
+    }
+}
+```
