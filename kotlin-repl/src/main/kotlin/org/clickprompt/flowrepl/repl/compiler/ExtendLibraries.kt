@@ -29,6 +29,7 @@ val KotlessLibDef = SimpleLibraryDefinition(
     imports = listOf(
         "io.kotless.dsl.ktor.*",
         "io.ktor.application.*",
+        "io.ktor.http.*",
         "io.ktor.request.*",
         "io.ktor.response.*",
         "io.ktor.routing.*",
@@ -56,8 +57,7 @@ val exposedLibDef = SimpleLibraryDefinition(
     imports = listOf(
         "org.jetbrains.exposed.sql.*",
         "org.jetbrains.exposed.sql.transactions.*",
-        "org.jetbrains.exposed.sql.transactions.transaction",
-        "org.jetbrains.exposed.sql.SchemaUtils.*"
+        "org.jetbrains.exposed.sql.SchemaUtils"
     ),
     dependencies = listOf(
         "org.jetbrains.exposed:exposed-core:0.40.1",

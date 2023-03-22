@@ -5,6 +5,7 @@ import org.clickprompt.flowrepl.repl.compiler.KotlinReplWrapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.shouldBe
+import io.kotless.dsl.ktor.KotlessAWS
 import io.kotless.dsl.spring.Kotless
 import org.junit.jupiter.api.Disabled
 
@@ -153,6 +154,84 @@ fun main() = "Hello world!"
 
 main()
     """
+        )
+    }
+
+    @Test
+    fun kotless_helloworld3() {
+        compiler.eval(
+            """
+%use kotless
+%use exposed
+import java.util.concurrent.TimeUnit
+            
+data class User(val id: Int, val username: String)
+
+class Server : KotlessAWS() {
+    override fun prepare(app: Application) {
+        Database.connect("jdbc:h2:mem:test", driver = "org.h2.Driver")
+
+        transaction {
+            SchemaUtils.create(Users)
+        }
+
+        app.routing {
+            post("/register") {
+                val user = call.receive<User>()
+                val id = transaction {
+                    // Insert the new user into the database
+                    Users.insert {
+                        it[username] = user.username
+                    } get Users.id
+                }
+
+                val newUser = User(id, user.username)
+                call.respond(newUser)
+            }
+
+            get("/users") {
+                val users = transaction {
+                    Users.selectAll().map {
+                        User(it[Users.id], it[Users.username])
+                    }
+                }
+                call.respond(users)
+            }
+
+            // get user by user id
+            get("/users/{id}") {
+                val id = call.parameters["id"]?.toIntOrNull()
+                if (id == null) {
+                    call.respondText("Invalid id", status = HttpStatusCode.BadRequest)
+                    return@get
+                }
+
+                val user = transaction {
+                    Users.select {
+                        Users.id eq id
+                    }.map {
+                        User(it[Users.id], it[Users.username])
+                    }.singleOrNull()
+                }
+
+                if (user == null) {
+                    call.respondText("User id not found", status = HttpStatusCode.NotFound)
+                } else {
+                    call.respond(user)
+                }
+            }
+        }
+    }
+}
+
+object Users : org.jetbrains.exposed.sql.Table("users") {
+    val id = integer("id").autoIncrement()
+    val username = varchar("username", 50).uniqueIndex()
+
+    override val primaryKey = PrimaryKey(id, name = "PK_User_ID")
+}
+
+            """
         )
     }
 }
