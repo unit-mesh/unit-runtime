@@ -1,4 +1,4 @@
-package org.clickprompt.flowrepl.socket
+package org.clickprompt.unitserver.socket
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.socket.config.annotation.EnableWebSocket

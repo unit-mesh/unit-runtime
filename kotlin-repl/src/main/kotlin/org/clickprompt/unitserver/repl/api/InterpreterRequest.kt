@@ -1,4 +1,4 @@
-package org.clickprompt.flowrepl.repl.api
+package org.clickprompt.unitserver.repl.api
 
 import kotlinx.serialization.Serializable
 

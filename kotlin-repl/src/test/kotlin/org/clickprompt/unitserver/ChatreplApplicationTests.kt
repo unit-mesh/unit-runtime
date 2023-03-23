@@ -1,4 +1,4 @@
-package org.clickprompt.flowrepl
+package org.clickprompt.unitserver
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

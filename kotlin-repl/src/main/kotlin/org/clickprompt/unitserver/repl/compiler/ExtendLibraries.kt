@@ -1,4 +1,4 @@
-package org.clickprompt.flowrepl.repl.compiler
+package org.clickprompt.unitserver.repl.compiler
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

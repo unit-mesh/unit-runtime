@@ -1,10 +1,10 @@
-package org.clickprompt.flowrepl.socket
+package org.clickprompt.unitserver.socket
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.clickprompt.flowrepl.repl.KotlinInterpreter
-import org.clickprompt.flowrepl.repl.api.InterpreterRequest
+import org.clickprompt.unitserver.repl.KotlinInterpreter
+import org.clickprompt.unitserver.repl.api.InterpreterRequest
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage

@@ -1,4 +1,4 @@
-package org.clickprompt.flowrepl.repl.compiler
+package org.clickprompt.unitserver.repl.compiler
 
 import org.jetbrains.kotlinx.jupyter.EvalRequestData
 import org.jetbrains.kotlinx.jupyter.ReplForJupyter
