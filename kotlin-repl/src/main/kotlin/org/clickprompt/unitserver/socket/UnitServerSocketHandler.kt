@@ -12,7 +12,7 @@ import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
 
-class FlowReplHandler : WebSocketHandler {
+class UnitServerSocketHandler : WebSocketHandler {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     private lateinit var replServer: KotlinInterpreter

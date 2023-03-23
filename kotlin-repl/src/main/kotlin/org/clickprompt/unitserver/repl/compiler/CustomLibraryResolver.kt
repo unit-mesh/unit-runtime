@@ -18,14 +18,14 @@ fun getResolverFromNamesMap(
     descriptors: Map<String, LibraryDescriptor>? = null,
     definitions: Map<String, LibraryDefinition>? = null,
 ): LibraryResolver {
-    return FlowReplLibraryResolver(
+    return CustomLibraryResolver(
         null,
         descriptors?.mapKeys { entry -> LibraryReference(AbstractLibraryResolutionInfo.Default(), entry.key) },
         definitions?.mapKeys { entry -> LibraryReference(AbstractLibraryResolutionInfo.Default(), entry.key) },
     )
 }
 
-class FlowReplLibraryResolver(
+class CustomLibraryResolver(
     parent: LibraryResolver?,
     initialDescriptorsCache: Map<LibraryReference, LibraryDescriptor>? = null,
     initialDefinitionsCache: Map<LibraryReference, LibraryDefinition>? = null,

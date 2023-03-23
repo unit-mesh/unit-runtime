@@ -1,9 +1,9 @@
 package org.clickprompt.unitserver.repl
 
 import org.clickprompt.unitserver.repl.api.InterpreterRequest
-import org.clickprompt.unitserver.repl.messaging.ErrorContent
-import org.clickprompt.unitserver.repl.messaging.Message
-import org.clickprompt.unitserver.repl.messaging.MessageType
+import org.clickprompt.unitserver.messaging.ErrorContent
+import org.clickprompt.unitserver.messaging.Message
+import org.clickprompt.unitserver.messaging.MessageType
 import org.clickprompt.unitserver.repl.compiler.KotlinReplWrapper
 import org.jetbrains.kotlinx.jupyter.api.toJson
 import org.jetbrains.kotlinx.jupyter.repl.EvalResultEx

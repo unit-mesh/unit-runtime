@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.repl.messaging
+package org.clickprompt.unitserver.messaging
 
 import kotlinx.serialization.Serializable
 

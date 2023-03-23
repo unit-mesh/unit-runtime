@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration @EnableWebSocket
 class WSConfig : WebSocketConfigurer {
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(FlowReplHandler(), "/repl")
+        registry.addHandler(UnitServerSocketHandler(), "/repl")
             .setAllowedOriginPatterns("*")
     }
 }
