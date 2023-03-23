@@ -1,11 +1,9 @@
 package org.clickprompt.unitserver.repl
 
-
 import org.clickprompt.unitserver.repl.compiler.KotlinReplWrapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.shouldBe
-import io.kotless.dsl.spring.Kotless
 import org.junit.jupiter.api.Disabled
 
 class KotlinInterpreterTest {
@@ -133,7 +131,7 @@ fun main() {
     val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
     val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
 
-    val kotless = instance ?: error("The entry point ${"$"}classToStart does not inherit from ${Kotless::class.qualifiedName}!")
+    val kotless = instance ?: error("The entry point ${"$"}classToStart does not inherit from "${'$'}{Kotless::class.qualifiedName}!")
 
     val app = SpringApplication(kotless.bootKlass.java)
     app.setDefaultProperties(mapOf("server.port" to port.toString()))
