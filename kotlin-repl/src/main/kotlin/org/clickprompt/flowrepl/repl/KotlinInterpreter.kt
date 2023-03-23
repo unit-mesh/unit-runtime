@@ -5,22 +5,23 @@ import org.clickprompt.flowrepl.repl.messaging.ErrorContent
 import org.clickprompt.flowrepl.repl.messaging.Message
 import org.clickprompt.flowrepl.repl.messaging.MessageType
 import org.clickprompt.flowrepl.repl.compiler.KotlinReplWrapper
+import org.jetbrains.kotlinx.jupyter.api.toJson
 import org.jetbrains.kotlinx.jupyter.repl.EvalResultEx
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class KotlinInterpreter  {
+class KotlinInterpreter {
     private var compiler: KotlinReplWrapper = KotlinReplWrapper()
     private val logger: Logger = LoggerFactory.getLogger(this.javaClass)
 
     fun eval(request: InterpreterRequest): Message {
-        try {
+        return try {
             val result = compiler.eval(request.code, request.id, request.history)
-            return convertResult(result, request.id)
+            convertResult(result, request.id)
         } catch (e: Exception) {
             logger.error(e.toString())
             val content = ErrorContent(e.javaClass.name, e.toString())
-            return Message(request.id, "", "", MessageType.ERROR, content = content)
+            Message(request.id, "", "", "", MessageType.ERROR, content = content)
         }
     }
 
@@ -28,12 +29,11 @@ class KotlinInterpreter  {
         val resultValue = result.rawValue
         val className: String = resultValue?.javaClass?.name.orEmpty()
 
-        val message = Message(
+        return Message(
             id,
             resultValue.toString(),
-            className
+            className,
+            result.displayValue.toJson().toString()
         )
-
-        return message
     }
 }
