@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.lang
+package org.clickprompt.unitserver.warpper.lang
 
 /**
  *
@@ -20,13 +20,18 @@ package org.clickprompt.unitserver.lang
  * main()
  * ```
  */
-class SpringLangBuilder {
-    companion object {
-        fun build(port: Int, appName: String): String {
-            return """
+class SpringLangBuilder: LangBuilder {
+    override fun build(port: Int): String {
+        return """
+
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
 fun main() {
     val port = $port
-    val classToStart = $appName::class.java.name
+    val classToStart = Application::class.java.name
 
     val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
     val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
@@ -40,6 +45,5 @@ fun main() {
 
 main()
  """
-        }
     }
 }
