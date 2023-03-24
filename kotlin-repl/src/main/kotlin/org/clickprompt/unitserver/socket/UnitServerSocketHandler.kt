@@ -1,6 +1,5 @@
 package org.clickprompt.unitserver.socket
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -14,6 +13,14 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketHandler
 import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
+
+
+object PortGenerator {
+    // random generate port range between 10000~20000
+    fun generate(): Int {
+        return (10000..20000).random()
+    }
+}
 
 class UnitServerSocketHandler : WebSocketHandler {
     private val logger = LoggerFactory.getLogger(this.javaClass)
@@ -31,7 +38,7 @@ class UnitServerSocketHandler : WebSocketHandler {
 
         val isUnitServer = LangCodeWrapper.hasLang(request.code)
         if (isUnitServer) {
-            request.code = LangCodeWrapper.wrapper(request.code, request.port)
+            request.code = LangCodeWrapper.wrapper(request.code, PortGenerator.generate())
         }
 
         val result = replServer.eval(request)
