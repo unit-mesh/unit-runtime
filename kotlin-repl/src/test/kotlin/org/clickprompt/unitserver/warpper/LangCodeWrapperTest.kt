@@ -60,4 +60,11 @@ $INSERTED_CODE
         val output = LangCodeWrapper.wrapper(sourceCode, port)
         assertNotNull(output)
     }
+
+    @Test
+    fun test_has_magic() {
+        val sourceCode = """%use spring"""
+        val output = LangCodeWrapper.hasLang(sourceCode)
+        assertTrue(output)
+    }
 }

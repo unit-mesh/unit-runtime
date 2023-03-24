@@ -4,6 +4,14 @@ import org.clickprompt.unitserver.warpper.lang.SpringLangBuilder
 
 object LangCodeWrapper {
     val supportedLangs: List<String> = listOf("spring")
+
+    fun hasLang(code: String): Boolean {
+        val langs = SimpleMagicMatcher().parseLang(code)
+        return langs.any {
+            supportedLangs.contains(it)
+        }
+    }
+
     fun wrapper(code: String, port: Int): String{
         val langs = SimpleMagicMatcher().parseLang(code)
         if (langs.isEmpty()) {
