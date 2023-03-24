@@ -10,7 +10,6 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.clickprompt.unitserver.messaging.Message
 import org.clickprompt.unitserver.messaging.MessageType
-import org.clickprompt.unitserver.messaging.RunningContent
 import org.clickprompt.unitserver.messaging.UnitServerContent
 import org.clickprompt.unitserver.repl.KotlinInterpreter
 import org.clickprompt.unitserver.repl.api.InterpreterRequest
