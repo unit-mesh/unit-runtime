@@ -41,6 +41,7 @@ class UnitServerSocketHandler : WebSocketHandler {
             request.code = LangCodeWrapper.wrapper(request.code, PortGenerator.generate())
         }
 
+        // todo: change to Thread for eval, and closed after new request ? with same id ?
         val result = replServer.eval(request)
         if (isUnitServer) {
             result.content = UnitServerContent(url = """http://localhost:${request.port}/""")
