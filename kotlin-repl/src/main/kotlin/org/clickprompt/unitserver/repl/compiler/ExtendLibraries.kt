@@ -27,6 +27,7 @@ val springLibDef = SimpleLibraryDefinition(
 
 val KotlessLibDef = SimpleLibraryDefinition(
     imports = listOf(
+        "io.kotless.dsl.spring.*",
         "io.kotless.dsl.ktor.*",
         "io.ktor.application.*",
         "io.ktor.http.*",
@@ -37,6 +38,9 @@ val KotlessLibDef = SimpleLibraryDefinition(
         "io.ktor.server.netty.*",
         "kotlin.reflect.KClass",
         "io.kotless.dsl.lang.http.*",
+
+        // todo: move to Kotlin libraries
+        "kotlin.reflect.KClass",
         "kotlin.reflect.full.primaryConstructor"
     ),
     dependencies = listOf(

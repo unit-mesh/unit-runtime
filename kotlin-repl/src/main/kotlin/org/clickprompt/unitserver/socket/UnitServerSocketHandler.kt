@@ -52,5 +52,4 @@ class UnitServerSocketHandler : WebSocketHandler {
     override fun supportsPartialMessages(): Boolean {
         return false
     }
-
 }

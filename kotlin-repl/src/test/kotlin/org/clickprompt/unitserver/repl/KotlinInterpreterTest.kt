@@ -23,7 +23,8 @@ class KotlinInterpreterTest {
 
     @Test
     internal fun spring_hello_world() {
-        compiler.eval("""            
+        compiler.eval(
+            """            
 package sample
 
 %use mysql
@@ -52,12 +53,14 @@ main(arrayOf("--server.port=8083"))
 
 %trackClasspath
 %trackExecution generated
-""".trimIndent())
+""".trimIndent()
+        )
     }
 
     @Test
     internal fun mysql_connector_demo() {
-        compiler.eval("""import java.sql.*
+        compiler.eval(
+            """import java.sql.*
 
 fun main() {
     val url = "jdbc:mysql://localhost:3306/test"
@@ -86,13 +89,15 @@ fun main() {
 }
 
 main()
-""")
+"""
+        )
     }
 
     @Test
     @Disabled
     fun kotless_helloworld() {
-        compiler.eval("""@file:Repository("https://packages.jetbrains.team/maven/p/ktls/maven")
+        compiler.eval(
+            """@file:Repository("https://packages.jetbrains.team/maven/p/ktls/maven")
 @file:Repository("https://repo.maven.apache.org/maven2/")
 
 @file:DependsOn("org.springframework.boot:spring-boot-starter-web:2.7.9")
@@ -138,12 +143,14 @@ fun main() {
     app.run()
 }
 
-main()""")
+main()"""
+        )
     }
 
     @Test
     fun kotless_helloworld2() {
-        compiler.eval("""
+        compiler.eval(
+            """
 %use kotless
 
 @Get("/")
@@ -229,6 +236,44 @@ object Users : org.jetbrains.exposed.sql.Table("users") {
 }
 
             """
+        )
+    }
+
+    @Disabled
+    @Test
+    fun test_really_world_spring() {
+        compiler.eval(
+            """%use spring, kotless
+
+@RestController
+class SampleController {
+  @GetMapping("/hello")
+  fun helloKotlin(): String {
+    return "hello world"
+  }
+}
+
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
+fun main() {
+    val port = 8080
+    val classToStart = Application::class.java.name
+
+    val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
+    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
+
+    val kotless = instance ?: error("instance inherit from Kotless!")
+
+    val app = SpringApplication(kotless.bootKlass.java)
+    app.setDefaultProperties(mapOf("server.port" to 8080.toString()))
+    app.run()
+}
+
+main()
+"""
         )
     }
 }

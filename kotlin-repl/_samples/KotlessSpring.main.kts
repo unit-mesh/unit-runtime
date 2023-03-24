@@ -17,9 +17,11 @@ import kotlin.reflect.full.primaryConstructor
 
 
 @RestController
-object Pages {
-    @GetMapping("/")
-    fun main() = "Hello World!"
+class SampleController {
+    @GetMapping("/hello")
+    fun helloKotlin(): String {
+        return "hello world"
+    }
 }
 
 @SpringBootApplication
@@ -28,19 +30,15 @@ open class Application : Kotless() {
 }
 
 fun main() {
-    val port = 8080
     val classToStart = Application::class.java.name
-    println("Starting $classToStart on port $port")
-//    val port = System.getenv("SERVER_PORT").toInt()
-//    val classToStart = System.getenv("CLASS_TO_START")
 
     val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
     val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
 
-    val kotless = instance ?: error("The entry point $classToStart does not inherit from ${Kotless::class.qualifiedName}!")
+    val kotless = instance ?: error("instance inherit from Kotless!")
 
     val app = SpringApplication(kotless.bootKlass.java)
-    app.setDefaultProperties(mapOf("server.port" to port.toString()))
+    app.setDefaultProperties(mapOf("server.port" to 8080.toString()))
     app.run()
 }
 

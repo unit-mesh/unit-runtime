@@ -23,7 +23,7 @@ package org.clickprompt.unitserver.warpper.lang
 class SpringLangBuilder(private val code: String, private val port: Int): LangBuilder {
 
     override fun build(): String {
-        return """${code}
+        return """$code
 
 @SpringBootApplication
 open class Application : Kotless() {
@@ -31,13 +31,12 @@ open class Application : Kotless() {
 }
 
 fun main() {
-    val port = $port
     val classToStart = Application::class.java.name
 
     val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
     val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
 
-    val kotless = instance ?: error("The entry point ${"$"}classToStart does not inherit from "${'$'}{Kotless::class.qualifiedName}!")
+    val kotless = instance ?: error("instance inherit from Kotless!")
 
     val app = SpringApplication(kotless.bootKlass.java)
     app.setDefaultProperties(mapOf("server.port" to ${port}.toString()))

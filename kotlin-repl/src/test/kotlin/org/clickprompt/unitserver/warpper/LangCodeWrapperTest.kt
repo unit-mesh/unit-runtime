@@ -47,8 +47,40 @@ open class Application : Kotless() {
         val output = LangCodeWrapper.wrapper(sourceCode, port)
         assertNotNull(output)
 
-        val expected = """$sourceCode
-$INSERTED_CODE
+        val expected = """%use spring            
+
+@RestController
+object Pages {
+    @GetMapping("/")
+    fun main() = "Hello World!"
+}
+
+@ComponentScan(basePackageClasses = [Pages::class])
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
+
+@SpringBootApplication
+open class Application : Kotless() {
+    override val bootKlass: KClass<*> = this::class
+}
+
+fun main() {
+    val classToStart = Application::class.java.name
+
+    val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
+    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? Kotless
+
+    val kotless = instance ?: error("instance inherit from Kotless!")
+
+    val app = SpringApplication(kotless.bootKlass.java)
+    app.setDefaultProperties(mapOf("server.port" to 8080.toString()))
+    app.run()
+}
+
+main()
 """
         assertEquals(expected, output)
     }
