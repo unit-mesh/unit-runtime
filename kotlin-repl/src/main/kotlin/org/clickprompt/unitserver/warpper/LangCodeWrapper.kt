@@ -2,7 +2,7 @@ package org.clickprompt.unitserver.warpper
 
 import org.clickprompt.unitserver.warpper.lang.SpringLangBuilder
 
-object LangWrapper {
+object LangCodeWrapper {
     val supportedLangs: List<String> = listOf("spring")
     fun wrapper(code: String, port: Int): String{
         val langs = SimpleMagicMatcher().parseLang(code)

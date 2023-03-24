@@ -23,8 +23,7 @@ package org.clickprompt.unitserver.warpper.lang
 class SpringLangBuilder(private val code: String, private val port: Int): LangBuilder {
 
     override fun build(): String {
-        return """
-${code}
+        return """${code}
 
 @SpringBootApplication
 open class Application : Kotless() {
@@ -46,6 +45,6 @@ fun main() {
 }
 
 main()
- """
+"""
     }
 }

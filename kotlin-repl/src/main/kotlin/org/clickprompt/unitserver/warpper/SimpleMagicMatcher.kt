@@ -1,22 +1,30 @@
 package org.clickprompt.unitserver.warpper
 
 class SimpleMagicMatcher {
-    private val MAGICS_SIGN = '%'
-    private val MAGICS_REGEX = Regex("^$MAGICS_SIGN.*$", RegexOption.MULTILINE)
-    private val CELL_MARKER_REGEX = Regex("""\A\s*#%%.*$""", RegexOption.MULTILINE)
+    private val USE_REGEX = Regex("""^\s*%use\s+([\w, ]+)""")
 
     /**
      * Parse magics from code
      * @param code code to parse
      * @return list of langs, like [spring, ktor, mysql]
+     *
+     * examples:
+     * code = "%use spring" -> return ["spring"]
+     * code = "%use spring, mysql" -> return ["spring", "mysql"]
+     * code = """%use mysql
+     * %use spring
+     * """ -> return ["mysql", "spring"]
      */
     fun parseLang(code: String): List<String> {
-        val maybeFirstMatch = CELL_MARKER_REGEX.find(code, 0)
-        val seed = maybeFirstMatch ?: MAGICS_REGEX.find(code, 0)
-        return generateSequence(seed) {
-            MAGICS_REGEX.find(code, it.range.last + 1)
-        }.map {
-            it.value
-        }.toList()
+        val magics = mutableListOf<String>()
+        val pattern = USE_REGEX
+        for (line in code.lines()) {
+            val matchResult = pattern.matchEntire(line.trim())
+            if (matchResult != null) {
+                val langs = matchResult.groupValues[1].split(",").map { it.trim() }
+                magics.addAll(langs)
+            }
+        }
+        return magics
     }
 }
