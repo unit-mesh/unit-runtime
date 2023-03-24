@@ -27,6 +27,7 @@ dependencies {
 
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
 	implementation("javax.websocket:javax.websocket-api:1.1")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")

@@ -1,5 +1,10 @@
 package org.clickprompt.unitserver.socket
 
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -16,15 +21,17 @@ import org.springframework.web.socket.WebSocketSession
 
 
 object PortGenerator {
-    // random generate port range between 10000~20000
     fun generate(): Int {
         return (10000..20000).random()
     }
 }
 
+@OptIn(DelicateCoroutinesApi::class)
 class UnitServerSocketHandler : WebSocketHandler {
+    private var lastJob: Job? = null
     private val logger = LoggerFactory.getLogger(this.javaClass)
     private lateinit var replServer: KotlinInterpreter
+
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         // Todo: find a way to inject the replServer, when connect
@@ -42,10 +49,21 @@ class UnitServerSocketHandler : WebSocketHandler {
         }
 
         // todo: change to Thread for eval, and closed after new request ? with same id ?
-        val result = replServer.eval(request)
         if (isUnitServer) {
-            result.content = UnitServerContent(url = """http://localhost:${request.port}/""")
+            if (lastJob != null) {
+                lastJob?.cancel()
+            }
+
+            val job = GlobalScope.launch {
+                val result = replServer.eval(request)
+                emit(session, Json.encodeToString(result))
+                result.content = UnitServerContent(url = """http://localhost:${request.port}/""")
+            }
+
+            this.lastJob = job
         }
+
+        val result = replServer.eval(request)
         emit(session, Json.encodeToString(result))
     }
 
