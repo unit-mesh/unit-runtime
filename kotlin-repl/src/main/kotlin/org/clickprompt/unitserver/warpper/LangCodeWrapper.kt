@@ -13,6 +13,13 @@ object LangCodeWrapper {
         }
     }
 
+    fun isKotless(code: String): Boolean {
+        val langs = SimpleMagicMatcher().parseLang(code)
+        return langs.any {
+            it == "ktor" || it == "kotless"
+        }
+    }
+
     fun wrapper(code: String, port: Int): String{
         val langs = SimpleMagicMatcher().parseLang(code)
         if (langs.isEmpty()) {

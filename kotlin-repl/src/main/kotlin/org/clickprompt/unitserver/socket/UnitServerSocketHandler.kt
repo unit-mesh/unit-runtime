@@ -66,7 +66,12 @@ class UnitServerSocketHandler : WebSocketHandler {
             }
 
             if (result.msgType == MessageType.RUNNING) {
-                result.content = UnitServerContent(url = "http://localhost:${request.port}")
+                var url = "http://localhost:${request.port}"
+                if (LangCodeWrapper.isKotless(request.code)) {
+                    url = "http://0.0.0.0:${request.port}"
+                }
+
+                result.content = UnitServerContent(url)
                 emit(session, Json.encodeToString(result))
             }
 
