@@ -11,7 +11,7 @@ class SimpleMagicMatcherTest {
         val code = """%use mysql
 %use spring
 """
-        val magics = matcher.parseMagic(code)
+        val magics = matcher.parseLang(code)
         assertEquals(2, magics.size)
         assertEquals("%use mysql", magics[0])
         assertEquals("%use spring", magics[1])
@@ -21,7 +21,7 @@ class SimpleMagicMatcherTest {
     fun parseMagicWithCellMarker() {
         val code = """%use mysql, spring
 """
-        val magics = matcher.parseMagic(code)
+        val magics = matcher.parseLang(code)
         assertEquals(1, magics.size)
         assertEquals("%use mysql, spring", magics[0])
     }
