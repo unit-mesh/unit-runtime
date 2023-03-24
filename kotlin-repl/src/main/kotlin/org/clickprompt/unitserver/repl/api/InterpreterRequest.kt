@@ -9,7 +9,7 @@ data class InterpreterRequest(
     val language: String = "kotlin",
     val framework: String = SupportedFramewrok.SPRING.toString(),
     val history: Boolean = false,
-    val port: Int = 8080
+    var port: Int = 8080
 )
 
 enum class SupportedFramewrok {

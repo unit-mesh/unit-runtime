@@ -15,6 +15,7 @@ import kotlin.reflect.KClass
 enum class MessageType(val contentClass: KClass<out MessageContent>) {
     NONE(NoneContent::class),
     ERROR(ErrorContent::class),
+    RUNNING(RunningContent::class),
     UNIT_SERVER(UnitServerContent::class);
 
     val type: String get() = name.lowercase()
@@ -34,6 +35,9 @@ class ErrorContent(val exception: String = "", val message: String = "") : Messa
 
 @Serializable
 class UnitServerContent(val url: String = "") : MessageContent()
+
+@Serializable
+class RunningContent() : MessageContent()
 
 @Serializable
 enum class DocStatus {

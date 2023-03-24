@@ -1,13 +1,16 @@
 package org.clickprompt.unitserver.socket
 
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.clickprompt.unitserver.messaging.Message
+import org.clickprompt.unitserver.messaging.MessageType
+import org.clickprompt.unitserver.messaging.RunningContent
 import org.clickprompt.unitserver.messaging.UnitServerContent
 import org.clickprompt.unitserver.repl.KotlinInterpreter
 import org.clickprompt.unitserver.repl.api.InterpreterRequest
@@ -45,7 +48,9 @@ class UnitServerSocketHandler : WebSocketHandler {
 
         val isUnitServer = LangCodeWrapper.hasLang(request.code)
         if (isUnitServer) {
-            request.code = LangCodeWrapper.wrapper(request.code, PortGenerator.generate())
+            val port = PortGenerator.generate()
+            request.port = port
+            request.code = LangCodeWrapper.wrapper(request.code, port)
         }
 
         // todo: change to Thread for eval, and closed after new request ? with same id ?
@@ -54,13 +59,19 @@ class UnitServerSocketHandler : WebSocketHandler {
                 lastJob?.cancel()
             }
 
-            val job = GlobalScope.launch {
-                val result = replServer.eval(request)
-                emit(session, Json.encodeToString(result))
-                result.content = UnitServerContent(url = """http://localhost:${request.port}/""")
+            var result = Message(request.id, "", "", "", MessageType.RUNNING)
+            GlobalScope.launch {
+                lastJob = this.coroutineContext.job
+
+                result = replServer.eval(request)
             }
 
-            this.lastJob = job
+            if (result.msgType == MessageType.RUNNING) {
+                result.content = UnitServerContent(url = "http://localhost:${request.port}")
+                emit(session, Json.encodeToString(result))
+            }
+
+            return
         }
 
         val result = replServer.eval(request)
@@ -69,6 +80,7 @@ class UnitServerSocketHandler : WebSocketHandler {
 
     fun emit(session: WebSocketSession, msg: String) = session.sendMessage(TextMessage(msg))
     override fun handleTransportError(session: WebSocketSession, exception: Throwable) {
+
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, closeStatus: CloseStatus) {
