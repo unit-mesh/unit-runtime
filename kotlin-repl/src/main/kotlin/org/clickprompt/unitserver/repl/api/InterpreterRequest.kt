@@ -5,10 +5,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class InterpreterRequest(
     var id: Int = -1,
-    val code: String,
+    var code: String,
     val language: String = "kotlin",
     val framework: String = SupportedFramewrok.SPRING.toString(),
-    val history: Boolean = false
+    val history: Boolean = false,
+    val port: Int = 8080
 )
 
 enum class SupportedFramewrok {

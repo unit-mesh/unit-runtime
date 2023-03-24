@@ -1,10 +1,13 @@
 package org.clickprompt.unitserver.socket
 
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.clickprompt.unitserver.messaging.UnitServerContent
 import org.clickprompt.unitserver.repl.KotlinInterpreter
 import org.clickprompt.unitserver.repl.api.InterpreterRequest
+import org.clickprompt.unitserver.warpper.LangCodeWrapper
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -14,7 +17,6 @@ import org.springframework.web.socket.WebSocketSession
 
 class UnitServerSocketHandler : WebSocketHandler {
     private val logger = LoggerFactory.getLogger(this.javaClass)
-
     private lateinit var replServer: KotlinInterpreter
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
@@ -24,8 +26,18 @@ class UnitServerSocketHandler : WebSocketHandler {
     }
 
     override fun handleMessage(session: WebSocketSession, message: WebSocketMessage<*>) {
+
         val request: InterpreterRequest = Json.decodeFromString(message.payload.toString())
+
+        val isUnitServer = LangCodeWrapper.hasLang(request.code)
+        if (isUnitServer) {
+            request.code = LangCodeWrapper.wrapper(request.code, request.port)
+        }
+
         val result = replServer.eval(request)
+        if (isUnitServer) {
+            result.content = UnitServerContent(url = """http://localhost:${request.port}/""")
+        }
         emit(session, Json.encodeToString(result))
     }
 

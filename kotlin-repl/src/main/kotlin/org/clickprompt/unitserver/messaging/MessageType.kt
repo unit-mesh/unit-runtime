@@ -15,8 +15,7 @@ import kotlin.reflect.KClass
 enum class MessageType(val contentClass: KClass<out MessageContent>) {
     NONE(NoneContent::class),
     ERROR(ErrorContent::class),
-    ARCHGUARD_GRAPH(ArchGuardGraph::class),
-    ARCHGUARD_EVOLUTION(ArchguardEvolution::class);
+    UNIT_SERVER(UnitServerContent::class);
 
     val type: String get() = name.lowercase()
 }
@@ -34,10 +33,7 @@ class NoneContent : MessageReplyContent(DocStatus.ABORT)
 class ErrorContent(val exception: String = "", val message: String = "") : MessageContent()
 
 @Serializable
-class ArchGuardGraph(val graphType: String = "") : MessageContent()
-
-@Serializable
-class ArchguardEvolution(val actionType: String = "") : MessageContent()
+class UnitServerContent(val url: String = "") : MessageContent()
 
 @Serializable
 enum class DocStatus {
