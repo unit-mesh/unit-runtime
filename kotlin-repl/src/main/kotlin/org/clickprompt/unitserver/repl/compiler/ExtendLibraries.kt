@@ -57,6 +57,24 @@ val KotlessLibDef = SimpleLibraryDefinition(
     ).map(::KernelRepository)
 )
 
+val ktorLibDef = SimpleLibraryDefinition(
+    imports = listOf(
+        "io.ktor.application.*",
+        "io.ktor.http.*",
+        "io.ktor.request.*",
+        "io.ktor.response.*",
+        "io.ktor.routing.*",
+        "io.ktor.server.engine.*",
+        "io.ktor.server.netty.*",
+        "kotlin.reflect.KClass",
+        "io.kotless.dsl.lang.http.*",
+    ),
+    dependencies = listOf(),
+    repositories = listOf(
+        "https://packages.jetbrains.team/maven/p/ktls/maven",
+    ).map(::KernelRepository)
+)
+
 val exposedLibDef = SimpleLibraryDefinition(
     imports = listOf(
         "org.jetbrains.exposed.sql.*",
@@ -76,6 +94,7 @@ fun extendLibraries(): LibraryResolver {
     val mysqlLibs = "mysql" to Json.encodeToString(mysqlLibDef)
     val kotless = "kotless" to Json.encodeToString(KotlessLibDef)
     val exposed = "exposed" to Json.encodeToString(exposedLibDef)
+    val ktor = "ktor" to Json.encodeToString(ktorLibDef)
 
-    return listOf(spring, mysqlLibs, kotless, exposed).toLibraries()
+    return listOf(spring, mysqlLibs, kotless, exposed, ktor).toLibraries()
 }
