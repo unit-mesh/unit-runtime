@@ -99,4 +99,53 @@ main()
         val output = LangCodeWrapper.hasLang(sourceCode)
         assertTrue(output)
     }
+
+    @Test
+    fun test_with_ktor() {
+        val sourceCode = """%use kotless
+            
+class Server : KotlessAWS() {
+    override fun prepare(app: Application) {
+        app.routing {
+            get("/") {
+                call.respondText { "Hello World!" }
+            }
+        }
+    }
+}
+"""
+        val port = 8080
+        val output = LangCodeWrapper.wrapper(sourceCode, port)
+        assertNotNull(output)
+        val expected = """%use kotless
+            
+class Server : KotlessAWS() {
+    override fun prepare(app: Application) {
+        app.routing {
+            get("/") {
+                call.respondText { "Hello World!" }
+            }
+        }
+    }
+}
+
+
+fun main() {
+    val classToStart = Server::class.java.name
+
+    val ktClass = ::main::class.java.classLoader.loadClass(classToStart).kotlin
+    val instance = (ktClass.primaryConstructor?.call() ?: ktClass.objectInstance) as? KotlessAWS
+
+    val kotless = instance ?: error("instance inherit from Kotless!")
+
+    embeddedServer(Netty, 8080) {
+        kotless.prepare(this)
+    }.start(wait = true)
+}
+
+main()
+
+""".trimIndent()
+        assertEquals(output, expected)
+    }
 }
