@@ -165,6 +165,7 @@ main()
     fun kotless_helloworld3() {
         compiler.eval(
             """
+%use ktor
 %use kotless
 %use exposed
 import java.util.concurrent.TimeUnit

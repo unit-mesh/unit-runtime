@@ -102,7 +102,7 @@ main()
 
     @Test
     fun test_with_ktor() {
-        val sourceCode = """%use kotless
+        val sourceCode = """%use ktor
             
 class Server : KotlessAWS() {
     override fun prepare(app: Application) {
@@ -117,7 +117,7 @@ class Server : KotlessAWS() {
         val port = 8080
         val output = LangCodeWrapper.wrapper(sourceCode, port)
         assertNotNull(output)
-        val expected = """%use kotless
+        val expected = """%use ktor
             
 class Server : KotlessAWS() {
     override fun prepare(app: Application) {

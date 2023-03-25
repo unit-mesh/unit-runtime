@@ -29,14 +29,6 @@ val KotlessLibDef = SimpleLibraryDefinition(
     imports = listOf(
         "io.kotless.dsl.spring.*",
         "io.kotless.dsl.ktor.*",
-        "io.ktor.application.*",
-        "io.ktor.http.*",
-        "io.ktor.request.*",
-        "io.ktor.response.*",
-        "io.ktor.routing.*",
-        "io.ktor.server.engine.*",
-        "io.ktor.server.netty.*",
-        "kotlin.reflect.KClass",
         "io.kotless.dsl.lang.http.*",
 
         // todo: move to Kotlin libraries
@@ -59,6 +51,8 @@ val KotlessLibDef = SimpleLibraryDefinition(
 
 val ktorLibDef = SimpleLibraryDefinition(
     imports = listOf(
+        "io.kotless.dsl.spring.*",
+        "io.kotless.dsl.ktor.*",
         "io.ktor.application.*",
         "io.ktor.http.*",
         "io.ktor.request.*",
@@ -66,10 +60,21 @@ val ktorLibDef = SimpleLibraryDefinition(
         "io.ktor.routing.*",
         "io.ktor.server.engine.*",
         "io.ktor.server.netty.*",
-        "kotlin.reflect.KClass",
         "io.kotless.dsl.lang.http.*",
+
+        // todo: move to Kotlin libraries
+        "kotlin.reflect.KClass",
+        "kotlin.reflect.full.primaryConstructor"
     ),
-    dependencies = listOf(),
+    dependencies = listOf(
+        "io.kotless:kotless-lang:0.2.0",
+        "io.kotless:kotless-lang-local:0.2.0",
+        "io.kotless:spring-boot-lang:0.2.0",
+        "io.kotless:spring-boot-lang-local:0.2.0",
+        "io.kotless:spring-lang-parser:0.2.0",
+        "io.kotless:ktor-lang:0.2.0",
+        "io.kotless:ktor-lang-local:0.2.0"
+    ),
     repositories = listOf(
         "https://packages.jetbrains.team/maven/p/ktls/maven",
     ).map(::KernelRepository)
