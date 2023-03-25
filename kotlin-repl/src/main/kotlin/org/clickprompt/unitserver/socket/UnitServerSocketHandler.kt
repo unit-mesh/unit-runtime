@@ -52,12 +52,12 @@ class UnitServerSocketHandler : WebSocketHandler {
             request.code = LangCodeWrapper.wrapper(request.code, port)
         }
 
+        if (lastJob != null) {
+            lastJob?.cancel()
+        }
+
         // todo: change to Thread for eval, and closed after new request ? with same id ?
         if (isUnitServer) {
-            if (lastJob != null) {
-                lastJob?.cancel()
-            }
-
             var result = Message(request.id, "", "", "", MessageType.RUNNING)
             GlobalScope.launch {
                 lastJob = this.coroutineContext.job
