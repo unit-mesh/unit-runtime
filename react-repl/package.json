@@ -6,15 +6,24 @@
     "dev": "nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "start": "cross-env NODE_ENV=production node dist/server.js",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.1.4",
+    "@codemirror/theme-one-dark": "^6.1.1",
     "@types/node": "18.15.8",
     "@types/react": "18.0.29",
     "@types/react-dom": "18.0.11",
+    "codemirror": "^6.0.1",
     "eslint": "8.36.0",
     "eslint-config-next": "13.2.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-formatter-codeframe": "^7.32.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
     "express": "^4.18.2",
+    "lint-staged": "^13.2.0",
     "next": "13.2.4",
     "nodemon": "^2.0.22",
     "react": "18.2.0",
@@ -26,5 +35,19 @@
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/ws": "^8.5.4"
+  },
+  "lint-staged": {
+    "js/**/*.{js,ts,tsx}": [
+      "eslint --format=codeframe --fix",
+      "git add"
+    ],
+    "website/pages/en/*.js": [
+      "eslint --format=codeframe --fix",
+      "git add"
+    ],
+    "website/data/*.js": [
+      "eslint --format=codeframe --fix",
+      "git add"
+    ]
   }
 }
