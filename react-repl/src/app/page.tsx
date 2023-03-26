@@ -2,7 +2,7 @@
 
 import styles from "./page.module.css";
 import { useEffect, useState } from "react";
-import { CodeEditor } from "@/app/components/CodeEditor";
+import { CodeEditor } from "@/app/components/editor/CodeEditor";
 
 export default function Home() {
   const [code, setCode] =
