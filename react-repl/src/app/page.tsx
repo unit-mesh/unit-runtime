@@ -1,21 +1,49 @@
 "use client";
 
 import styles from "./page.module.css";
-import { useEffect, useState } from "react";
+import { useDeferredValue, useEffect, useState } from "react";
 import { CodeEditor } from "@/app/components/editor/CodeEditor";
 
+import initSwc, { transformSync } from "@swc/wasm-web";
+
 export default function Home() {
-  const [code, setCode] =
-    useState(`const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<h1>Hello, world!</h1>);`);
+  const [code, setCode] = useState(`function Root() {
+  return <>Hello world!</>;
+}`);
+
+  const deferredCode = useDeferredValue(code);
   const [compiled, setCompiled] = useState("");
 
+  const [initialized, setInitialized] = useState(false);
+
   useEffect(() => {
-    // transform(code, {
-    //   presets: ["@babel/preset-env", "@babel/preset-react"],
-    // });
-    // console.log(code);
-  }, [code]);
+    async function importAndRunSwcOnMount() {
+      await initSwc();
+      setInitialized(true);
+    }
+    importAndRunSwcOnMount();
+  }, []);
+
+  function compile() {
+    if (!initialized) {
+      return;
+    }
+    const result = transformSync(deferredCode, {
+      jsc: {
+        parser: {
+          syntax: "typescript",
+          tsx: true,
+          decorators: false,
+          dynamicImport: false,
+        },
+      },
+    });
+    setCompiled(result.code);
+  }
+
+  useEffect(() => {
+    compile();
+  }, [deferredCode, initialized]);
 
   return (
     <main className={styles.main}>
