@@ -37,32 +37,29 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.11.0-337")
 
 	// Serverless Kotlin Language Binding
-	implementation("io.kotless:kotless-lang:0.2.0")
-	implementation("io.kotless:kotless-lang-local:0.2.0")
+	implementation(libs.kotless.lang)
+	implementation(libs.kotless.lang.local)
 
 	// Serverless Kotlin Spring
-	implementation("io.kotless:spring-boot-lang:0.2.0")
-	implementation("io.kotless:spring-boot-lang-local:0.2.0")
-	implementation("io.kotless:spring-lang-parser:0.2.0")
+	implementation(libs.kotless.spring.boot.lang)
+	implementation(libs.kotless.spring.boot.lang.local)
+	implementation(libs.kotless.spring.lang.parser)
 
 	// Serverless Kotlin Ktor
-	implementation("io.kotless:ktor-lang:0.2.0")
-	implementation("io.kotless:ktor-lang-local:0.2.0")
+	implementation(libs.kotless.ktor.lang)
+	implementation(libs.kotless.ktor.lang.local)
+
+	implementation("com.h2database:h2:2.1.212")
+	implementation("mysql:mysql-connector-java:8.0.32")
 
 	// Database ORM
-	implementation("com.h2database:h2:2.1.212")
-	implementation("org.jetbrains.exposed", "exposed-core", "0.40.1")
-	implementation("org.jetbrains.exposed", "exposed-dao", "0.40.1")
-	implementation("org.jetbrains.exposed", "exposed-jdbc", "0.40.1")
+	implementation(libs.bundles.exposed)
 
-	// for REPL
-	implementation("mysql:mysql-connector-java:8.0.32")
-	implementation("org.jdbi:jdbi3-core:3.37.1")
-	implementation("org.jdbi:jdbi3-kotlin-sqlobject:3.37.1")
-	implementation("org.jdbi:jdbi3-kotlin:3.37.1")
+	// JDBI
+	implementation(libs.bundles.jdbi)
 
 	// tips: don't add follow deps to project will cause issues
-	compileOnly("org.jetbrains.kotlin:kotlin-scripting-jvm:1.8.20-Beta")
+	compileOnly("org.jetbrains.kotlin:kotlin-scripting-jvm")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

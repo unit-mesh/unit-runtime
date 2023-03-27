@@ -12,6 +12,12 @@ assertj = "3.22.0"
 
 kotest = "5.5.4"
 
+kotless = "0.2.0"
+
+exposed = "0.40.1"
+
+jdbi = "3.37.1"
+
 [libraries]
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
@@ -34,6 +40,27 @@ test-assertj = { group = "org.assertj", name = "assertj-core", version.ref = "as
 kotest-core = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
 kotest-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 
+# 	// Serverless Kotlin Language Binding
+kotless-lang = { group = "io.kotless", name = "kotless-lang", version.ref = "kotless" }
+kotless-lang-local = { group = "io.kotless", name = "kotless-lang-local", version.ref = "kotless" }
+
+kotless-spring-boot-lang = { group = "io.kotless", name = "spring-boot-lang", version.ref = "kotless" }
+kotless-spring-boot-lang-local = { group = "io.kotless", name = "spring-boot-lang-local", version.ref = "kotless" }
+kotless-spring-lang-parser = { group = "io.kotless", name = "spring-lang-parser", version.ref = "kotless" }
+
+kotless-ktor-lang = { group = "io.kotless", name = "ktor-lang", version.ref = "kotless" }
+kotless-ktor-lang-local = { group = "io.kotless", name = "ktor-lang-local", version.ref = "kotless" }
+
+# Exposed ORM
+exposed-core = { group = "org.jetbrains.exposed", name = "exposed-core", version.ref = "exposed" }
+exposed-dao = { group = "org.jetbrains.exposed", name = "exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { group = "org.jetbrains.exposed", name = "exposed-jdbc", version.ref = "exposed" }
+
+# JDBI
+jdbi-core = { group = "org.jdbi", name = "jdbi3-core", version.ref = "jdbi" }
+jdbi-kotlin-sqlobject = { group = "org.jdbi", name = "jdbi3-kotlin-sqlobject", version.ref = "jdbi" }
+jdbi-kotlin = { group = "org.jdbi", name = "jdbi3-kotlin", version.ref = "jdbi" }
+
 [plugins]
 jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
@@ -41,3 +68,5 @@ jupyter = { id = "org.jetbrains.kotlin.jupyter.api", version.ref = "jupyterApi" 
 
 [bundles]
 test = ["test-junit-params", "kotlin-test", "test-kotlintest-assertions", "test-mockk", "test-assertj"]
+exposed = ["exposed-core", "exposed-dao", "exposed-jdbc"]
+jdbi = ["jdbi-core", "jdbi-kotlin-sqlobject", "jdbi-kotlin"]
