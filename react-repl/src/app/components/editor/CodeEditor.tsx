@@ -25,5 +25,7 @@ export function CodeEditor({
 }: UseCodeEditorProps) {
   // wrapper for codemirror
   const ref = useCodeEditor({ value, onChange, extensions });
-  return <div ref={ref as any} />;
+  return (
+    <div ref={ref as any} style={{ minHeight: "250", minWidth: "80ch", overflowY: "auto" }} />
+  );
 }

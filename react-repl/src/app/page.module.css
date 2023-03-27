@@ -8,12 +8,15 @@
 }
 
 .description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
   font-size: 0.85rem;
   max-width: var(--max-width);
   width: 100%;
   z-index: 2;
   font-family: var(--font-mono);
+
+  display: grid;
+  align-items: stretch;
+  justify-items: stretch;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: minmax(120px, 50%) calc(100vh - 120px);
 }
