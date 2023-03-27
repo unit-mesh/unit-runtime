@@ -25,7 +25,7 @@ For examples:
 
 1. generate a "Hello, world" and send to Kotlin Repl
 
-```
+```kotlin
 @RestController
 object Pages {
    @GetMapping("/")
