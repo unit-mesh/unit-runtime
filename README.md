@@ -4,31 +4,38 @@
 
 > Unit Runtime is an efficient and user-friendly AI code execution environment that allows for one-click startup and real-time interaction, helping you quickly build and test AI code.
 
-Todos:
+Workflow:
 
-- Backend
-    - [x] Kotlin
-        - [x] basic REPL
-        - [ ] Spring Boot framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
-        - [x] Ktor framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
-    - [x] TypeScript
-        - [x] basic REPL
-        - [x] Deno with Hono
-    - [ ] Java
-    - [ ] Python
-- [x] Frontend
-    - [x] React with TypeScript and Babel
-    - [ ] Vue
-    - [ ]Angular
+```mermaid
+sequenceDiagram
+    participant Human
+    participant LLM/ChatGPT
+    participant Unit Runtime
+    participant Language REPL
 
-## Development
+    Human->>+LLM/ChatGPT: Provide prompt for generated code
+    LLM/ChatGPT->>+Unit Runtime: Provide code snippets/units
+    Unit Runtime->>+Language REPL: Compile and return
+    Language REPL-->>-Unit Runtime: Output result
+    Unit Runtime-->>-LLM/ChatGPT: Display processing result
+    LLM/ChatGPT-->>-Human: Verify/modify code
+```
 
-1. git clone `https://github.com/prompt-engineering/unit-runtime`
-2. `./gradlew bootRun`
+For examples:
 
-API:
+1. generate a "Hello, world" and send to Kotlin Repl
 
-### Websocket
+```
+@RestController
+object Pages {
+   @GetMapping("/")
+   fun main() = "Hello World!"
+}
+```
+
+2. will start a server like: [http://localhost:10043](http://localhost:10043) , you can test and verify it.
+
+## Websocket API
 
 server: `ws://localhost:8080/repl`
 
@@ -57,6 +64,31 @@ data class Message(
     var content: MessageContent? = null,
 )
 ```
+
+## Todos
+
+- Backend
+    - [x] Kotlin
+        - [x] basic REPL
+        - [ ] Spring Boot framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
+        - [x] Ktor framework based on [https://github.com/JetBrains/kotless](https://github.com/JetBrains/kotless)
+    - [x] TypeScript
+        - [x] basic REPL
+        - [x] Deno with Hono
+    - [ ] Java
+    - [ ] Python
+- [x] Frontend
+    - [x] React with TypeScript and Babel
+    - [ ] Vue
+    - [ ]Angular
+
+## Development
+
+1. git clone `https://github.com/prompt-engineering/unit-runtime`
+2. `./gradlew bootRun`
+
+API:
+
 
 ## LICENSE
 
