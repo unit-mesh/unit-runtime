@@ -9,8 +9,9 @@ import { transform } from "@babel/standalone";
 export default function Home() {
   const iframe$ = useRef<HTMLIFrameElement | null>(null);
 
-  const [code, setCode] = useState(`import React from "react";
-import {createRoot} from "react-dom";
+  const [code, setCode] =
+    useState(`import React, {useState, useEffect} from "react";
+import ReactDom, {createRoot} from "react-dom/client";
 
 function Root() {
   const [tick, setTick] = useState<number>(0);
@@ -18,7 +19,7 @@ function Root() {
   useEffect(() => {
     const id = setInterval(() => {
       setTick(it => it+1);
-    });
+    }, 1000);
     
     return () => clearInterval(id);
   }, []);
@@ -30,8 +31,8 @@ function Root() {
 
 const rootDom = document.createElement("div");
 document.body.append(rootDom);
-const root = createRoot(root)
-root.render()
+const root = createRoot(rootDom);
+root.render(<Root />);
 `);
 
   const deferredCode = useDeferredValue(code);
@@ -49,13 +50,14 @@ root.render()
             {
               globals: {
                 react: "React",
-                "react-dom": "ReactDom",
+                "react-dom/client": "ReactDOM",
+                "react-dom": "ReactDOM",
               },
               exactGlobals: true,
             },
           ],
         ],
-        filename: "e.tsx",
+        filename: "scratch.tsx",
       }).code;
       setCompiled(code ?? "");
 
@@ -68,7 +70,6 @@ root.render()
 
   useEffect(() => {
     const code = compile();
-    console.log("code in effect: ", code);
 
     if (iframe$.current && code) {
       const ifr = iframe$.current;
@@ -77,20 +78,23 @@ root.render()
       reactLoaderScript.src =
         "https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js";
       reactDomLoaderScript.src =
-        "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/index.min.js";
-
-      ifr?.contentDocument?.body.append(
-        reactLoaderScript,
-        reactDomLoaderScript
-      );
+        "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js";
 
       const script = document.createElement("script");
       script.innerHTML = code;
+      reactLoaderScript.onload = () => {
+        reactDomLoaderScript.onload = () => {
+          ifr?.contentDocument?.body.append(script);
+        };
 
-      ifr?.contentDocument?.body.append(script);
+        ifr?.contentDocument?.body.append(reactDomLoaderScript);
+      };
+      ifr?.contentDocument?.body.append(reactLoaderScript);
 
       return () => {
-        script.remove();
+        if (ifr?.contentDocument?.body) {
+          ifr.contentDocument.body.innerHTML = "";
+        }
       };
     }
   }, [deferredCode]);
