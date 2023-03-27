@@ -1,7 +1,7 @@
-package org.clickprompt.unitserver.warpper
+package org.clickprompt.unitserver.magic
 
-import org.clickprompt.unitserver.warpper.lang.KtorLangBuilder
-import org.clickprompt.unitserver.warpper.lang.SpringLangBuilder
+import org.clickprompt.unitserver.magic.lang.KtorLangBuilder
+import org.clickprompt.unitserver.magic.lang.SpringLangBuilder
 
 object LangCodeWrapper {
     val supportedLangs: List<String> = listOf("spring", "ktor")

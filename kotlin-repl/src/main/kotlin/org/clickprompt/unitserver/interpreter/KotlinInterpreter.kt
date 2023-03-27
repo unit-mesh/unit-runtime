@@ -1,10 +1,10 @@
-package org.clickprompt.unitserver.repl
+package org.clickprompt.unitserver.interpreter
 
-import org.clickprompt.unitserver.repl.api.InterpreterRequest
+import org.clickprompt.unitserver.interpreter.api.InterpreterRequest
 import org.clickprompt.unitserver.messaging.ErrorContent
 import org.clickprompt.unitserver.messaging.Message
 import org.clickprompt.unitserver.messaging.MessageType
-import org.clickprompt.unitserver.repl.compiler.KotlinReplWrapper
+import org.clickprompt.unitserver.interpreter.compiler.KotlinReplWrapper
 import org.jetbrains.kotlinx.jupyter.api.toJson
 import org.jetbrains.kotlinx.jupyter.repl.EvalResultEx
 import org.slf4j.Logger

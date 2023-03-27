@@ -1,6 +1,6 @@
-package org.clickprompt.unitserver.repl
+package org.clickprompt.unitserver.interpreter
 
-import org.clickprompt.unitserver.repl.compiler.KotlinReplWrapper
+import org.clickprompt.unitserver.interpreter.compiler.KotlinReplWrapper
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import io.kotest.matchers.shouldBe

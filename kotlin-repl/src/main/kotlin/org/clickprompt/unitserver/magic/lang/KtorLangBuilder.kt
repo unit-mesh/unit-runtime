@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.warpper.lang
+package org.clickprompt.unitserver.magic.lang
 
 class KtorLangBuilder(private val code: String, private val port: Int): LangBuilder {
     override fun build(): String {

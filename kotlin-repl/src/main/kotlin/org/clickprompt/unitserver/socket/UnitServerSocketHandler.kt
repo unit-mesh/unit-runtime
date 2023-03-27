@@ -11,9 +11,9 @@ import kotlinx.serialization.json.Json
 import org.clickprompt.unitserver.messaging.Message
 import org.clickprompt.unitserver.messaging.MessageType
 import org.clickprompt.unitserver.messaging.UnitServerContent
-import org.clickprompt.unitserver.repl.KotlinInterpreter
-import org.clickprompt.unitserver.repl.api.InterpreterRequest
-import org.clickprompt.unitserver.warpper.LangCodeWrapper
+import org.clickprompt.unitserver.interpreter.KotlinInterpreter
+import org.clickprompt.unitserver.interpreter.api.InterpreterRequest
+import org.clickprompt.unitserver.magic.LangCodeWrapper
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
@@ -36,7 +36,6 @@ class UnitServerSocketHandler : WebSocketHandler {
 
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        // Todo: find a way to inject the replServer, when connect
         replServer = KotlinInterpreter()
         logger.info("onOpen WebSocket")
     }

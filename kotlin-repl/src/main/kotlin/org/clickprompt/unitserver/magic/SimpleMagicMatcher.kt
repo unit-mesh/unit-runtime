@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.warpper
+package org.clickprompt.unitserver.magic
 
 class SimpleMagicMatcher {
     private val USE_REGEX = Regex("""^\s*%use\s+([\w, ]+)""")

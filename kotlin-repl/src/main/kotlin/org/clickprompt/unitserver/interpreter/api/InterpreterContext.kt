@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.repl.api
+package org.clickprompt.unitserver.interpreter.api
 
 // todo: handle for request
 class InterpreterContext {

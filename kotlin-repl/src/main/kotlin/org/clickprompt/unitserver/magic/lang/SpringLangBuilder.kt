@@ -1,4 +1,4 @@
-package org.clickprompt.unitserver.warpper.lang
+package org.clickprompt.unitserver.magic.lang
 
 /**
  *
