@@ -3,12 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "2.7.9"
 	id("io.spring.dependency-management") version "1.1.0"
-//	id("org.graalvm.buildtools.native") version "0.9.20"
+
+	id("org.graalvm.buildtools.native") version "0.9.20"
+
 	kotlin("jvm") version "1.8.20-Beta"
 	kotlin("plugin.serialization") version "1.8.20-Beta"
 	kotlin("plugin.spring") version "1.7.22"
 	id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-337"
-	// kotlinx.serialization.SerializationException: Serializer for class 'InterpreterRequest' is not found.
 }
 
 group = "org.clickprompt"
