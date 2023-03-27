@@ -3,7 +3,6 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
   min-height: 100vh;
 }
 
@@ -18,5 +17,5 @@
   align-items: stretch;
   justify-items: stretch;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: minmax(120px, 50%) calc(100vh - 120px);
+  grid-template-rows: minmax(120px, 80vh) 70vh;
 }
