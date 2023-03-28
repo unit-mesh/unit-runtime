@@ -8,7 +8,7 @@ import WebSocket from "ws";
 // - https://nextjs.org/docs/advanced-features/custom-server
 // - https://github.com/websockets/ws
 
-const port = parseInt(process.env.PORT || "3000", 10);
+const port = parseInt(process.env.PORT || "8080", 10);
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const nextHandler = app.getRequestHandler();
@@ -35,6 +35,7 @@ app.prepare().then(() => {
 
   server.listen(port);
 
+  console.info(`> Ready on http://localhost:${port}`);
   server.on("error", (err: any) => {
     if (err.code === "EADDRINUSE") {
       console.log("Address in use, retrying...");

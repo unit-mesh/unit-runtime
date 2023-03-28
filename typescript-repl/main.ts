@@ -8,4 +8,7 @@ const app = new Hono();
 app.get("/", (c) => c.text("Hello! Hono!"));
 app.get("/repl", (ctx: Context) => flowReplHandler.hookOn(ctx));
 
-serve(app.fetch);
+serve({
+  fetch: app.fetch,
+  port: 8080,
+});
