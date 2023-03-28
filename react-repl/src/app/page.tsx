@@ -3,40 +3,7 @@
 import styles from "./page.module.css";
 import { useDeferredValue, useEffect, useRef, useState } from "react";
 import { CodeEditor } from "@/app/components/editor/CodeEditor";
-
-import { transform } from "@babel/standalone";
-
-function compile(
-  filename: string | null | undefined = "scratch.tsx",
-  deferredCode: string,
-  compiledAction: (value: ((prevState: string) => string) | string) => void
-) {
-  try {
-    const code = transform(deferredCode, {
-      presets: ["env", "typescript", "react"],
-      plugins: [
-        [
-          "transform-modules-umd",
-          {
-            globals: {
-              react: "React",
-              "react-dom/client": "ReactDOM",
-              "react-dom": "ReactDOM",
-            },
-            exactGlobals: true,
-          },
-        ],
-      ],
-      filename: filename,
-    }).code;
-    compiledAction(code ?? "");
-
-    return code;
-  } catch (e) {
-    console.log(e);
-    return null;
-  }
-}
+import { BUNDLE_SCRIPTS, compile } from "@/app/common/compile";
 
 export default function Home() {
   const iframe$ = useRef<HTMLIFrameElement | null>(null);
@@ -77,10 +44,8 @@ root.render(<Root />);
       const ifr = iframe$.current;
       const reactLoaderScript = document.createElement("script");
       const reactDomLoaderScript = document.createElement("script");
-      reactLoaderScript.src =
-        "https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js";
-      reactDomLoaderScript.src =
-        "https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js";
+      reactLoaderScript.src = BUNDLE_SCRIPTS.react;
+      reactDomLoaderScript.src = BUNDLE_SCRIPTS.reactDom;
 
       const script = document.createElement("script");
       script.innerHTML = code;
