@@ -10,7 +10,7 @@ export const BUNDLE_SCRIPTS = {
 export function compile(
   filename: string | null | undefined = "scratch.tsx",
   deferredCode: string,
-  compiledAction: (value: ((prevState: string) => string) | string) => void
+  compiledAction?: (value: ((prevState: string) => string) | string) => void
 ) {
   try {
     const code = transform(deferredCode, {
@@ -30,7 +30,7 @@ export function compile(
       ],
       filename: filename,
     }).code;
-    compiledAction(code ?? "");
+    compiledAction ? compiledAction(code ?? "") : null;
 
     return code;
   } catch (e) {

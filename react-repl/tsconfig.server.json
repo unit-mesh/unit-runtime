@@ -3,10 +3,14 @@
   "compilerOptions": {
     "module": "commonjs",
     "outDir": "dist",
-    "lib": ["es2019"],
-    "target": "es2019",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "isolatedModules": false,
-    "noEmit": false
+    "noEmit": false,
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["server.ts"]
+  "include": ["server.ts", "**/*.ts"],
+  "exclude": ["node_modules"]
 }

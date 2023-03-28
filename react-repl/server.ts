@@ -2,6 +2,8 @@ import { createServer } from "http";
 import express from "express";
 import next from "next";
 import WebSocket from "ws";
+import { InterpreterRequest, Message } from "./src/common/unit.types";
+import { BUNDLE_SCRIPTS, compile } from "./src/common/compile";
 
 // refs:
 // - https://github.com/vercel/next.js/blob/canary/examples/custom-server/server.ts
@@ -16,17 +18,34 @@ const nextHandler = app.getRequestHandler();
 app.prepare().then(() => {
   const expressApp = express();
   const server = createServer(expressApp);
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocket.Server({ server, path: "/repl" });
 
-  expressApp.get("/repl", function (req, res) {
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        // Note: we add a `time` attribute to help with the UI state management
-        client.send(JSON.stringify({ type: "buttons:yes", time: new Date() }));
-      }
+  wss.on("connection", (ws) => {
+    ws.on("message", (message) => {
+      const req: InterpreterRequest = JSON.parse(message.toString());
+      const compiledCode = compile(`${req.id}.tsx`, req.code);
+
+      const output: Message = {
+        id: req.id,
+        resultValue: compiledCode ?? "",
+        className: "",
+        msgType: "frontend",
+        content: {
+          scripts: BUNDLE_SCRIPTS,
+        },
+      };
+
+      ws.send(JSON.stringify(output));
     });
 
-    res.send("Hello World");
+    // Handle WebSocket errors
+    ws.on("error", (error) => {
+      console.error(`WebSocket error: ${error}`);
+    });
+
+    ws.on("close", () => {
+      console.log("WebSocket disconnected");
+    });
   });
 
   expressApp.all("*", (req, res) => {

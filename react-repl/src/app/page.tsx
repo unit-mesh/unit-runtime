@@ -3,7 +3,7 @@
 import styles from "./page.module.css";
 import { useDeferredValue, useEffect, useRef, useState } from "react";
 import { CodeEditor } from "@/app/components/editor/CodeEditor";
-import { BUNDLE_SCRIPTS, compile } from "@/app/common/compile";
+import { BUNDLE_SCRIPTS, compile } from "@/common/compile";
 
 export default function Home() {
   const iframe$ = useRef<HTMLIFrameElement | null>(null);
