@@ -29,7 +29,7 @@ app.prepare().then(() => {
         id: req.id,
         resultValue: compiledCode ?? "",
         className: "",
-        msgType: "frontend",
+        msgType: "frontend_bundle",
         content: {
           scripts: BUNDLE_SCRIPTS,
         },
