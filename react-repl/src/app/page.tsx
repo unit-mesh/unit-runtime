@@ -6,6 +6,38 @@ import { CodeEditor } from "@/app/components/editor/CodeEditor";
 
 import { transform } from "@babel/standalone";
 
+function compile(
+  filename: string | null | undefined = "scratch.tsx",
+  deferredCode: string,
+  compiledAction: (value: ((prevState: string) => string) | string) => void
+) {
+  try {
+    const code = transform(deferredCode, {
+      presets: ["env", "typescript", "react"],
+      plugins: [
+        [
+          "transform-modules-umd",
+          {
+            globals: {
+              react: "React",
+              "react-dom/client": "ReactDOM",
+              "react-dom": "ReactDOM",
+            },
+            exactGlobals: true,
+          },
+        ],
+      ],
+      filename: filename,
+    }).code;
+    compiledAction(code ?? "");
+
+    return code;
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+}
+
 export default function Home() {
   const iframe$ = useRef<HTMLIFrameElement | null>(null);
 
@@ -37,36 +69,9 @@ root.render(<Root />);
 
   const deferredCode = useDeferredValue(code);
   const [compiled, setCompiled] = useState("");
-  function compile() {
-    try {
-      const code = transform(deferredCode, {
-        presets: ["env", "typescript", "react"],
-        plugins: [
-          [
-            "transform-modules-umd",
-            {
-              globals: {
-                react: "React",
-                "react-dom/client": "ReactDOM",
-                "react-dom": "ReactDOM",
-              },
-              exactGlobals: true,
-            },
-          ],
-        ],
-        filename: "scratch.tsx",
-      }).code;
-      setCompiled(code ?? "");
-
-      return code;
-    } catch (e) {
-      console.log(e);
-      return null;
-    }
-  }
 
   useEffect(() => {
-    const code = compile();
+    const code = compile("scratch.tsx", deferredCode, setCompiled);
 
     if (iframe$.current && code) {
       const ifr = iframe$.current;
