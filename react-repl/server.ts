@@ -29,9 +29,11 @@ app.prepare().then(() => {
         id: req.id,
         resultValue: compiledCode ?? "",
         className: "",
-        msgType: "frontend_bundle",
+        msgType: "react_bundle",
         content: {
-          scripts: BUNDLE_SCRIPTS,
+          react: BUNDLE_SCRIPTS.react,
+          reactDom: BUNDLE_SCRIPTS.reactDom,
+          thirdParty: [],
         },
       };
 
