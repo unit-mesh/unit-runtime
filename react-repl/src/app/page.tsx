@@ -37,9 +37,6 @@ root.render(<Root />);
 
   const deferredCode = useDeferredValue(code);
   const [compiled, setCompiled] = useState("");
-
-  const [initialized, setInitialized] = useState(false);
-
   function compile() {
     try {
       const code = transform(deferredCode, {
