@@ -119,7 +119,7 @@ fn run(module: &[u8], entry_point: &str) -> anyhow::Result<Box<[Value]>> {
     let instance = Instance::new(&mut store, &module, &import_object)?;
 
     let add_one = instance.exports.get_function(entry_point)?;
-    let result = add_one.call(&mut store, &[Value::I32(42)])?;
+    let result = add_one.call(&mut store, &[])?;
 
     Ok(result)
 }
