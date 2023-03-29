@@ -1,5 +1,10 @@
 # React REPL
 
+two parts:
+
+- client (test only). in order to enable debug for React Repl, we create a client side as a playground.
+- server
+
 ## Getting Started
 
 First, run the development server:

@@ -2,8 +2,8 @@ import { createServer } from "http";
 import express from "express";
 import next from "next";
 import WebSocket from "ws";
-import { InterpreterRequest, Message } from "./src/common/unit.types";
-import { BUNDLE_SCRIPTS, compile } from "./src/common/compile";
+import { InterpreterRequest, Message } from "./common/unit.types";
+import { BUNDLE_SCRIPTS, compile } from "./common/compile";
 
 // refs:
 // - https://github.com/vercel/next.js/blob/canary/examples/custom-server/server.ts
