@@ -8,17 +8,24 @@ Workflow:
 
 ```mermaid
 sequenceDiagram
-    participant Human
-    participant LLM/ChatGPT
+    participant Source Code
+    participant Unit PreProcessor
+    participant GPT
+    participant Custom LLM
+    participant Unit Prompter
     participant Unit Runtime
-    participant Language REPL
+    participant Human
 
-    Human->>+LLM/ChatGPT: Provide prompt for generated code
-    LLM/ChatGPT->>+Unit Runtime: Provide code snippets/units
-    Unit Runtime->>+Language REPL: Compile and return
-    Language REPL-->>-Unit Runtime: Output result
-    Unit Runtime-->>-LLM/ChatGPT: Display processing result
-    LLM/ChatGPT-->>-Human: Verify/modify code
+    Source Code->>+Unit PreProcessor: Source code
+    Unit PreProcessor->>+GPT: Processed code
+    GPT-->-Custom LLM: Data cleaned
+    Unit Prompter->>+Custom LLM: Lora
+    Human->>+Unit Runtime: Requirements
+    Unit Runtime->>+Custom LLM: Prompt
+    Custom LLM->>-Unit Runtime: Code snippets (Unit)
+    Unit Runtime->>-Human: Services, component  (Unit)
+    Human->>+Human: Test, verify and modify code (Unit)
+    Human->>+SCM: Push code
 ```
 
 For examples:
