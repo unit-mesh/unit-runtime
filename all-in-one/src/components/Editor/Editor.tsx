@@ -9,5 +9,5 @@ import MonacoEditor, {
 } from "@monaco-editor/react";
 
 export default function Editor() {
-  return <MonacoEditor />;
+  return <MonacoEditor width="100%" height="100%" />;
 }
