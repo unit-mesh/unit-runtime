@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write -u ./src"
+    "format": "prettier --write -u ./src",
+    "patch-package": "patch-package",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
@@ -29,6 +31,7 @@
     "postcss": "^8.4.21",
     "prettier": "^2.8.7",
     "tailwindcss": "^3.3.0",
-    "workbox-webpack-plugin": "^6.5.4"
+    "workbox-webpack-plugin": "^6.5.4",
+    "patch-package": "^6.5.1"
   }
 }
