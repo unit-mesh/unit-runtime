@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write -u ./src"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.4.6",
+    "@webcontainer/api": "^1.1.0",
     "client-only": "^0.0.1",
     "next": "13.2.4",
     "react": "18.2.0",
@@ -20,8 +23,12 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
+    "autoprefixer": "^10.4.14",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.7",
+    "tailwindcss": "^3.3.0",
     "workbox-webpack-plugin": "^6.5.4"
   }
 }
