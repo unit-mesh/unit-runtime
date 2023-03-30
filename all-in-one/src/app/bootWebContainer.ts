@@ -8,13 +8,16 @@ let __webcontainerInstance: Promise<WebContainer> = new Promise(
   (resolve, reject) => {
     console.log("booting webcontainer");
     WebContainer.boot()
-      .then((it) => resolve(init(it)))
+      .then((it) => {
+        console.log("webcontainer booted");
+        return init(it);
+      })
       .catch((err) => reject(err));
   }
 );
 
-function init(container: WebContainer): WebContainer {
-  container.fs.mkdir("/tmp");
+async function init(container: WebContainer): Promise<WebContainer> {
+  await container.fs.mkdir("/tmp");
 
   // init fs
   container.mount({}, { mountPoint: "/tmp" });
