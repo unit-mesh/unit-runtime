@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-import routing from "workbox-routing"
+import {registerRoute} from "workbox-routing"
 import type {RouteHandlerCallbackOptions} from "workbox-core"
 
 /**
@@ -12,7 +12,8 @@ const resources = (self as any).__WB_MANIFEST; // this is just to satisfy workbo
 
 // ... your SW code
 
-routing.registerRoute(
+console.log("^https?:\/\/HOST\/BASE_URL\/(\/.*)$");
+registerRoute(
     /^https?:\/\/HOST\/BASE_URL\/(\/.*)$/,
     async ({
       request,
@@ -30,6 +31,8 @@ routing.registerRoute(
 
   async function postToViteWorker(pathname: string): Promise<Response> {
     self.postMessage({ pathname });
+
+    return new Response("Loading...", {"status": 200, "statusText": "OK"});
 
     return new Promise((resolve) => {
         self.addEventListener(
