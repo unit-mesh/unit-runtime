@@ -1,3 +1,6 @@
+const { DefinePlugin } = require("webpack");
+
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
@@ -20,6 +23,16 @@ const nextConfig = {
       }
     ]
   },
+
+  webpack(config) {
+    config.plugins.push(
+      new DefinePlugin({
+        "__PROJ_ROOT__": JSON.stringify(__dirname),
+      })
+    );
+
+    return config;
+  }
 
   // https://github.com/vercel/next.js/issues/33863#issuecomment-1140518693
 

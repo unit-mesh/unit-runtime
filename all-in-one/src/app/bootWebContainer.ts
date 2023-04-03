@@ -2,57 +2,70 @@
 
 import "client-only";
 
-import { FileSystemAPI, WebContainer } from "@webcontainer/api";
+import { WebContainer } from "@webcontainer/api";
+import { resolve } from "path";
 
-let __webcontainerInstance: Promise<WebContainer> = new Promise(
-  (resolve, reject) => {
-    console.log("booting webcontainer");
-    WebContainer.boot()
-      .then((it) => {
-        console.log("webcontainer booted");
-        return init(it);
-      })
-      .catch((err) => reject(err));
-  }
-);
+let __webcontainerInstance: WebContainer | null;
 
 async function init(container: WebContainer): Promise<WebContainer> {
   await container.fs.mkdir("/tmp");
 
   // init fs
-  container.mount({}, { mountPoint: "/tmp" });
-
+  await container.mount({}, { mountPoint: "/tmp" });
   return container;
 }
 
-export async function getWebContainerInstance(): Promise<WebContainer> {
+export function initFs(container: WebContainer, bootfs: any, clean = true) {
+  if (clean) {
+    container.fs.rm("/tmp/scrach", { recursive: true });
+    container.fs.mkdir("/tmp/scrach");
+  }
+
+  if (typeof bootfs !== "object") {
+    throw new Error("invalid bootfs");
+  }
+
+  if (Object.keys(bootfs).length === 0) {
+    throw new Error("empty bootfs");
+  }
+
+  for (const [key, value] of Object.entries(bootfs)) {
+    if (key === "_$__Ty__") {
+      continue;
+    }
+
+    if ((value as any)._$__Ty__ === "file") {
+      container.fs.writeFile(
+        resolve("/tmp/scrath/", (value as any).path),
+        (value as any).content
+      );
+    } else if ((value as any)._$__Ty__ === "dir") {
+      container.fs.mkdir(resolve("/tmp/scrath/", (value as any).path));
+      initFs(container, value, false);
+    } else {
+      throw new Error("invalid bootfs");
+    }
+  }
+}
+
+export const destroyInstance = () => {
+  __webcontainerInstance?.teardown();
+  __webcontainerInstance = null;
+};
+
+const getInstance = async () => {
+  if (!__webcontainerInstance) {
+    __webcontainerInstance = await new Promise((resolve, reject) => {
+      console.log("booting webcontainer");
+      WebContainer.boot()
+        .then((it) => {
+          console.log("webcontainer booted");
+          return resolve(init(it));
+        })
+        .catch((err) => reject(err));
+    });
+  }
   return __webcontainerInstance;
-}
-
-export async function importFs(): Promise<FileSystemAPI> {
-  return (await __webcontainerInstance).fs;
-}
-
-export async function importOn() {
-  return (await __webcontainerInstance).mount;
-}
-
-export async function importon() {
-  return (await __webcontainerInstance).on;
-}
-
-export async function getPath() {
-  return (await __webcontainerInstance).path;
-}
-
-export async function importSpawn() {
-  return (await __webcontainerInstance).spawn;
-}
-
-export async function teardown() {
-  return (await __webcontainerInstance).teardown();
-}
-
-export async function getWorkdir() {
-  return (await __webcontainerInstance).workdir;
-}
+};
+export type GetInstance = typeof getInstance;
+export default getInstance;

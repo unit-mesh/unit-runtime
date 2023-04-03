@@ -18,7 +18,15 @@ const mapFrameworkToLanguage = {
   Svelte: "svelte-sfc",
 };
 
-export default function Editor({ framework = "React" }: { framework: string }) {
+export default function Editor({
+  framework = "React",
+  input = "",
+  onChange,
+}: {
+  framework: string;
+  input: string;
+  onChange: (value: string) => void;
+}) {
   const monaco = useMonaco();
 
   useEffect(() => {
@@ -51,15 +59,34 @@ export default function Editor({ framework = "React" }: { framework: string }) {
     }
   }, [monaco !== null]);
 
+  const onInputChange = (value: string | undefined) => {
+    onChange(value ?? "");
+  };
+
   return (
-    <MonacoEditor
-      width="100%"
-      height="100%"
-      language={
-        mapFrameworkToLanguage[
-          framework as keyof typeof mapFrameworkToLanguage
-        ] ?? "typescript"
-      }
-    />
+    <div className="relative grid grid-cols-[3fr_2fr] h-full">
+      <MonacoEditor
+        height="100%"
+        options={{
+          fontSize: 16,
+          minimap: { enabled: true },
+        }}
+        value={input}
+        onChange={onInputChange}
+        language={
+          mapFrameworkToLanguage[
+            framework as keyof typeof mapFrameworkToLanguage
+          ] ?? "typescript"
+        }
+      />
+      <MonacoEditor
+        height="100%"
+        options={{
+          fontSize: 16,
+          minimap: { enabled: false },
+        }}
+        language="javascript"
+      />
+    </div>
   );
 }
