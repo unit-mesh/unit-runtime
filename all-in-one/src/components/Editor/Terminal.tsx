@@ -1,6 +1,7 @@
 import { WebContainer, WebContainerProcess } from "@webcontainer/api";
 import { useEffect, useRef, useState } from "react";
 import { Terminal as Xterm } from "xterm";
+import { FitAddon } from "xterm-addon-fit";
 
 export type TerminalProps = {
   className?: string;
@@ -18,6 +19,7 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
         rows: 24,
         convertEol: true,
 
+        scrollOnUserInput: true,
         cursorBlink: true,
         cursorStyle: "block",
         fontFamily: "Fira Code",
@@ -28,7 +30,14 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
           foreground: "#d4d4d4",
         },
       });
+      const fitAddon = new FitAddon();
+      term.loadAddon(fitAddon);
+
       term.open(terminal$.current);
+      document.body.addEventListener("resize", () => {
+        fitAddon.fit();
+      });
+      fitAddon.fit();
 
       let shellProcess: WebContainerProcess | null = null;
 
@@ -39,6 +48,7 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
           new WritableStream({
             write(data) {
               term.write(data);
+              fitAddon.fit();
             },
           })
         );
@@ -50,6 +60,7 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
         });
       });
       setTerm(term);
+
       return () => {
         term.dispose();
         setTerm(null);
@@ -58,9 +69,5 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
     }
   }, [webcontainer]);
 
-  return (
-    <div className={className}>
-      <div className="w-full h-full relative" ref={terminal$}></div>
-    </div>
-  );
+  return <div className={className + " overflow-y-auto"} ref={terminal$}></div>;
 }
