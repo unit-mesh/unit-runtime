@@ -15,10 +15,20 @@ async function init(container: WebContainer): Promise<WebContainer> {
   return container;
 }
 
-export function initFs(container: WebContainer, bootfs: any, clean = true) {
+export async function initFs(
+  container: WebContainer,
+  bootfs: any,
+  clean = true
+) {
+  const root = "/tmp/scratch";
+
   if (clean) {
-    container.fs.rm("/tmp/scrach", { recursive: true });
-    container.fs.mkdir("/tmp/scrach");
+    try {
+      await container.fs.rm(root, { recursive: true });
+    } catch {
+    } finally {
+      await container.fs.mkdir(root, { recursive: true });
+    }
   }
 
   if (typeof bootfs !== "object") {
@@ -35,25 +45,25 @@ export function initFs(container: WebContainer, bootfs: any, clean = true) {
     }
 
     if ((value as any)._$__Ty__ === "file") {
-      container.fs.writeFile(
-        resolve("/tmp/scrath/", (value as any).path),
+      await container.fs.writeFile(
+        resolve(root, (value as any).path),
         (value as any).content
       );
     } else if ((value as any)._$__Ty__ === "dir") {
-      container.fs.mkdir(resolve("/tmp/scrath/", (value as any).path));
-      initFs(container, value, false);
+      await container.fs.mkdir(resolve(root, (value as any).path), {
+        recursive: true,
+      });
+      await initFs(container, value, false);
+    } else if (key === "path") {
+      /** ignore */
     } else {
       throw new Error("invalid bootfs");
     }
   }
 }
 
-export const destroyInstance = () => {
-  __webcontainerInstance?.teardown();
-  __webcontainerInstance = null;
-};
-
-const getInstance = async () => {
+export const initInstance = async () => {
+  console.log("initInstance", __webcontainerInstance);
   if (!__webcontainerInstance) {
     __webcontainerInstance = await new Promise((resolve, reject) => {
       console.log("booting webcontainer");
@@ -65,6 +75,14 @@ const getInstance = async () => {
         .catch((err) => reject(err));
     });
   }
+};
+
+export const destroyInstance = () => {
+  __webcontainerInstance?.teardown();
+  __webcontainerInstance = null;
+};
+
+const getInstance = async () => {
   return __webcontainerInstance;
 };
 export type GetInstance = typeof getInstance;

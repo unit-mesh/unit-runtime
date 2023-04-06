@@ -5,26 +5,20 @@ import TopPanel from "@/components/TopPanel/TopPanel";
 import Editor from "@/components/Editor/Editor";
 import { useEffect, useState } from "react";
 
-import getInstance, { initFs, destroyInstance } from "./bootWebContainer";
+import getInstance, {
+  initFs,
+  destroyInstance,
+  initInstance,
+} from "./bootWebContainer";
 import FileTree from "@/components/Editor/FileTree";
 import { WebContainer } from "@webcontainer/api";
 
+if (typeof window !== "undefined") {
+  initInstance();
+}
+
 export default function Home() {
   const [framework, setFramework] = useState("React");
-  const [webcontainer, setWebcontainer] = useState<WebContainer | null>(null);
-
-  useEffect(() => {
-    (async () => {
-      console.log("#################################");
-      const webcontainer = await getInstance();
-      console.log("??????????????????????", webcontainer);
-      setWebcontainer(webcontainer);
-    })();
-
-    return () => {
-      destroyInstance();
-    };
-  }, []);
 
   const [input, setInput] = useState("");
   useEffect(() => {
@@ -37,6 +31,9 @@ export default function Home() {
       const result = await fetch(
         "/api/bootfs?framework=" + framework.toLowerCase()
       ).then((it) => it.json());
+
+      const webcontainer = await getInstance();
+
       console.log("??", webcontainer);
       if (webcontainer) {
         console.log("init fs");
@@ -46,7 +43,7 @@ export default function Home() {
         console.log("re", r);
       }
     })();
-  }, [framework, webcontainer]);
+  }, [framework]);
 
   return (
     <main className="h-full">

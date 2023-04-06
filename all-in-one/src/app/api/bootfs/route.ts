@@ -31,6 +31,9 @@ async function getBootstrapContents(ty: (typeof SUPPORTED_FRAMEWORK)[number]) {
         result[file.name] = {
           ...(await getContentsRecursively(resolve(dir, file.name))),
           _$__Ty__: "dir",
+          path: normalize(
+            relative(contentRoot, resolve(dir, file.name))
+          ).replaceAll("\\", "/"),
         };
       } else {
         result[file.name] = {
