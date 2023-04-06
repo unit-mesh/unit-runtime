@@ -1,63 +1,82 @@
-"use client";
+import MonacoEditor from "@monaco-editor/react";
+import type { editor } from "monaco-editor";
+import type { Monaco } from "@monaco-editor/react";
 
-import "client-only";
+import { useEffect, useRef } from "react";
 
-import MonacoEditor, {
-  DiffEditor,
-  useMonaco,
-  loader,
-} from "@monaco-editor/react";
-import { useEffect } from "react";
+import Terminal from "./Terminal";
 
 import { vueSfc } from "./vue-sfc";
 import { svelteSfc } from "./svelte-sfc";
+import getInstance from "@/app/bootWebContainer";
+import { WebContainer } from "@webcontainer/api";
 
-const mapFrameworkToLanguage = {
-  React: "typescript",
-  Vue: "vue-sfc",
-  Svelte: "svelte-sfc",
-};
-
-export default function Editor({
-  framework = "React",
-  input = "",
-  onChange,
-}: {
-  framework: string;
+export type EditorProps = {
   input: string;
+  language: string;
+  file: string;
+  webcontainer: WebContainer | null;
   onChange: (value: string) => void;
-}) {
-  const monaco = useMonaco();
+};
+export default function Editor({
+  input = "",
+  language = "javascript",
+  file = "",
+  webcontainer,
+  onChange = () => {},
+}: EditorProps) {
+  const monaco$ = useRef<Monaco | null>(null);
+  const editor$ = useRef<editor.IStandaloneCodeEditor | null>(null);
 
   useEffect(() => {
-    if (monaco) {
-      monaco.languages.register({ id: "vue-sfc" });
-      monaco.languages.setLanguageConfiguration("vue-sfc", {
-        brackets: [["<", ">"]],
-        autoClosingPairs: [
-          { open: "<", close: ">" },
-          { open: '"', close: '"' },
-          { open: "'", close: "'" },
-          { open: "`", close: "`" },
-        ],
-      });
-      monaco.languages.setTokensProvider("vue-sfc", vueSfc);
+    if (monaco$.current && editor$.current) {
+      const model = monaco$.current.editor.createModel(
+        input,
+        language,
+        monaco$.current.Uri.parse(file)
+      );
 
-      monaco.languages.register({ id: "svelte-sfc" });
+      editor$.current.setModel(model);
 
-      monaco.languages.setLanguageConfiguration("svelte-sfc", {
-        brackets: [["<", ">"]],
-        autoClosingPairs: [
-          { open: "<", close: ">" },
-          { open: '"', close: '"' },
-          { open: "'", close: "'" },
-          { open: "`", close: "`" },
-        ],
-      });
-
-      monaco.languages.setTokensProvider("svelte-sfc", svelteSfc);
+      if (file.endsWith(".jsx") || file.endsWith(".tsx")) {
+        monaco$.current.languages.typescript.typescriptDefaults.setCompilerOptions(
+          {
+            jsx: monaco$.current.languages.typescript.JsxEmit.React,
+          }
+        );
+      }
     }
-  }, [monaco !== null]);
+  }, [language, file]);
+
+  useEffect(() => {
+    if (monaco$.current) {
+      monaco$.current.languages.register({ id: "vue-sfc" });
+      monaco$.current.languages.setLanguageConfiguration("vue-sfc", {
+        brackets: [["<", ">"]],
+        autoClosingPairs: [
+          { open: "<", close: ">" },
+          { open: '"', close: '"' },
+          { open: "'", close: "'" },
+          { open: "`", close: "`" },
+        ],
+      });
+      monaco$.current.languages.setTokensProvider("vue-sfc", vueSfc);
+
+      monaco$.current.languages.register({ id: "svelte-sfc" });
+
+      monaco$.current.languages.setLanguageConfiguration("svelte-sfc", {
+        brackets: [["<", ">"]],
+        autoClosingPairs: [
+          { open: "<", close: ">" },
+          { open: '"', close: '"' },
+          { open: "'", close: "'" },
+          { open: "`", close: "`" },
+        ],
+      });
+
+      monaco$.current.languages.setTokensProvider("svelte-sfc", svelteSfc);
+    }
+  }, [monaco$.current !== null]);
 
   const onInputChange = (value: string | undefined) => {
     onChange(value ?? "");
@@ -66,27 +85,31 @@ export default function Editor({
   return (
     <div className="relative grid grid-cols-[3fr_2fr] h-full">
       <MonacoEditor
-        height="100%"
+        onMount={(editor, monaco) => {
+          editor$.current = editor;
+          monaco$.current = monaco;
+        }}
+        height="100vh"
         options={{
           fontSize: 16,
           minimap: { enabled: true },
         }}
+        language={language}
         value={input}
         onChange={onInputChange}
-        language={
-          mapFrameworkToLanguage[
-            framework as keyof typeof mapFrameworkToLanguage
-          ] ?? "typescript"
-        }
       />
-      <MonacoEditor
-        height="100%"
-        options={{
-          fontSize: 16,
-          minimap: { enabled: false },
-        }}
-        language="javascript"
-      />
+      <div className="relative h-full">
+        <MonacoEditor
+          height="60vh"
+          options={{
+            fontSize: 16,
+            minimap: { enabled: false },
+          }}
+          language="javascript"
+        />
+
+        <Terminal className="h-[40vh]" webcontainer={webcontainer} />
+      </div>
     </div>
   );
 }

@@ -11,13 +11,26 @@ import getInstance, {
   initInstance,
 } from "./bootWebContainer";
 import FileTree from "@/components/Editor/FileTree";
-import { WebContainer } from "@webcontainer/api";
+import { WebContainer, WebContainerProcess } from "@webcontainer/api";
+
+const languageMap = new Map<string, string>([
+  ["html", "html"],
+  ["css", "css"],
+  ["js", "javascript"],
+  ["ts", "typescript"],
+  ["vue", "vue-sfc"],
+  ["svelte", "svelte-sfc"],
+  ["jsx", "javascript"],
+  ["tsx", "typescript"],
+]);
 
 export default function Home() {
   const [webcontainer, setWebcontainer] = useState<WebContainer | null>(null);
   const [framework, setFramework] = useState("React");
 
   const [files, setFiles] = useState<FileTreeItem[]>([]);
+  const [currentFile, setCurrentFile] = useState<FileTreeItem | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState("javascript");
 
   useEffect(() => {
     initInstance()
@@ -59,13 +72,29 @@ export default function Home() {
           refresh={() => {
             refreshTree().then(setFiles);
           }}
+          downloadDeps={() => installDeps()}
           onSelected={(item) => {
             if (item.type === "file") {
               webcontainer?.fs.readFile(item.path, "utf-8").then(setInput);
+              setCurrentFile(item);
+
+              const file = item.name;
+              for (const [ext, lang] of languageMap) {
+                if (file.endsWith("." + ext)) {
+                  setCurrentLanguage(lang);
+                  break;
+                }
+              }
             }
           }}
         />
-        <Editor framework={framework} input={input} onChange={setInput} />
+        <Editor
+          input={input}
+          onChange={setInput}
+          language={currentLanguage}
+          file={currentFile?.name ?? ""}
+          webcontainer={webcontainer}
+        />
       </div>
     </main>
   );
@@ -82,8 +111,6 @@ async function refreshTree(): Promise<FileTreeItem[]> {
     const r = await webcontainer?.fs.readdir(path, {
       withFileTypes: true,
     });
-
-    console.log("refresh", r);
 
     if (!r) return [];
 
@@ -107,5 +134,45 @@ async function refreshTree(): Promise<FileTreeItem[]> {
       })
     );
   };
-  return listDir("/tmp/scratch");
+  const result = await listDir("/tmp/scratch");
+  console.log("listDir result", result);
+  return result;
+}
+
+async function installDeps() {
+  const webcontainer = await getInstance();
+
+  const x = async (
+    webcontainer: WebContainer,
+    command: string,
+    args: string[] = []
+  ) => {
+    console.log("running", command, args);
+    const process = await webcontainer.spawn(command, args, {
+      output: true,
+      terminal: {
+        cols: 80,
+        rows: 32,
+      },
+    });
+    const reader = process.output.pipeTo(
+      new WritableStream({
+        write(chunk) {
+          console.log("[Output] ", chunk);
+        },
+      })
+    );
+
+    await process.kill();
+  };
+
+  console.log("starting install deps");
+
+  if (!webcontainer) return;
+
+  await x(webcontainer, "cd", ["./tmp/scratch"]);
+  await x(webcontainer, "ls", ["/usr/local/bin"]);
+
+  // await x(webcontainer, "ls");
+  // await x(webcontainer, "npm", ["install"]);
 }
