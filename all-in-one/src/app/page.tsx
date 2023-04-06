@@ -60,7 +60,6 @@ export default function Home() {
             refreshTree().then(setFiles);
           }}
           onSelected={(item) => {
-            console.log("selected", item);
             if (item.type === "file") {
               webcontainer?.fs.readFile(item.path, "utf-8").then(setInput);
             }
