@@ -4,7 +4,7 @@ import { Terminal as Xterm } from "xterm";
 
 export type TerminalProps = {
   className?: string;
-  webcontainer?: WebContainer;
+  webcontainer: WebContainer | null;
 };
 
 export default function Terminal({ className, webcontainer }: TerminalProps) {
