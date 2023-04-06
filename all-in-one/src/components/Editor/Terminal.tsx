@@ -16,6 +16,8 @@ export default function Terminal({ className, webcontainer }: TerminalProps) {
       const term = new Xterm({
         cols: 80,
         rows: 24,
+        convertEol: true,
+
         cursorBlink: true,
         cursorStyle: "block",
         fontFamily: "Fira Code",
