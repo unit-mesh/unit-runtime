@@ -63,7 +63,6 @@ export async function initFs(
 }
 
 export const initInstance = async () => {
-  console.log("initInstance", __webcontainerInstance);
   if (!__webcontainerInstance) {
     __webcontainerInstance = await new Promise((resolve, reject) => {
       console.log("booting webcontainer");
@@ -75,6 +74,8 @@ export const initInstance = async () => {
         .catch((err) => reject(err));
     });
   }
+
+  return __webcontainerInstance!;
 };
 
 export const destroyInstance = () => {
