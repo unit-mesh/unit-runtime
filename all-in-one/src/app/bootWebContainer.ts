@@ -12,6 +12,10 @@ async function init(container: WebContainer): Promise<WebContainer> {
 
   // init fs
   await container.mount({}, { mountPoint: "/tmp" });
+
+  container.on("server-ready", (port, url) => {
+    console.log("server ready", port, url);
+  });
   return container;
 }
 

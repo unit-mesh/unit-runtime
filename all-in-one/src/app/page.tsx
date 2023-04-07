@@ -92,7 +92,7 @@ export default function Home() {
           input={input}
           onChange={setInput}
           language={currentLanguage}
-          file={currentFile?.name ?? ""}
+          file={currentFile}
           webcontainer={webcontainer}
         />
       </div>

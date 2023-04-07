@@ -10,18 +10,19 @@ import { vueSfc } from "./vue-sfc";
 import { svelteSfc } from "./svelte-sfc";
 import getInstance from "@/app/bootWebContainer";
 import { WebContainer } from "@webcontainer/api";
+import type { FileTreeItem } from "./FileTree";
 
 export type EditorProps = {
   input: string;
   language: string;
-  file: string;
+  file: FileTreeItem | null;
   webcontainer: WebContainer | null;
   onChange: (value: string) => void;
 };
 export default function Editor({
   input = "",
   language = "javascript",
-  file = "",
+  file,
   webcontainer,
   onChange = () => {},
 }: EditorProps) {
@@ -33,12 +34,12 @@ export default function Editor({
       const model = monaco$.current.editor.createModel(
         input,
         language,
-        monaco$.current.Uri.parse(file)
+        monaco$.current.Uri.parse(file?.name ?? "")
       );
 
       editor$.current.setModel(model);
 
-      if (file.endsWith(".jsx") || file.endsWith(".tsx")) {
+      if (file?.name.endsWith(".jsx") || file?.name.endsWith(".tsx")) {
         monaco$.current.languages.typescript.typescriptDefaults.setCompilerOptions(
           {
             jsx: monaco$.current.languages.typescript.JsxEmit.React,
@@ -83,7 +84,17 @@ export default function Editor({
   };
 
   return (
-    <div className="relative grid grid-cols-[3fr_2fr] h-full overflow-hidden">
+    <div
+      className="relative grid grid-cols-[3fr_2fr] h-full overflow-hidden"
+      onKeyDown={(e) => {
+        if (e.key === "s" && e.ctrlKey) {
+          e.preventDefault();
+          if (file) {
+            console.log("save", file, input, webcontainer);
+            webcontainer?.fs.writeFile(file.path, input);
+          }
+        }
+      }}>
       <MonacoEditor
         onMount={(editor, monaco) => {
           editor$.current = editor;
