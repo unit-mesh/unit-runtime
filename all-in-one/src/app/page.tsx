@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <main className="h-full">
       <TopPanel framework={framework} onFrameworkSelected={setFramework} />
-      <div className="grid grid-rows-1 grid-cols-[200px_1fr] h-[calc(100%-50px)] w-full">
+      <div className="grid grid-rows-1 grid-cols-[200px_1fr] h-[calc(100%-3rem)] w-full">
         <FileTree
           items={files}
           refresh={() => {

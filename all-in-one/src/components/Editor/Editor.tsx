@@ -83,13 +83,12 @@ export default function Editor({
   };
 
   return (
-    <div className="relative grid grid-cols-[3fr_2fr] h-full">
+    <div className="relative grid grid-cols-[3fr_2fr] h-full overflow-hidden">
       <MonacoEditor
         onMount={(editor, monaco) => {
           editor$.current = editor;
           monaco$.current = monaco;
         }}
-        height="100vh"
         options={{
           fontSize: 16,
           minimap: { enabled: true },
@@ -98,9 +97,8 @@ export default function Editor({
         value={input}
         onChange={onInputChange}
       />
-      <div className="relative h-full">
+      <div className="relative h-full overflow-hidden grid grid-rows-[2fr_1fr]">
         <MonacoEditor
-          height="60vh"
           options={{
             fontSize: 16,
             minimap: { enabled: false },
@@ -108,7 +106,7 @@ export default function Editor({
           language="javascript"
         />
 
-        <Terminal className="h-[40vh]" webcontainer={webcontainer} />
+        <Terminal className="pb-[20px]" webcontainer={webcontainer} />
       </div>
     </div>
   );
