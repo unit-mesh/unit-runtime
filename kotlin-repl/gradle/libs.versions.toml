@@ -1,8 +1,7 @@
 [versions]
 kotlin = "1.8.0"
 
-# 0.11.0-208
-jupyterApi = "0.11.0-337"
+jupyterApi = "0.11.0-398"
 kotlinxSerialization = "1.5.0"
 
 junit = "5.9.1"
