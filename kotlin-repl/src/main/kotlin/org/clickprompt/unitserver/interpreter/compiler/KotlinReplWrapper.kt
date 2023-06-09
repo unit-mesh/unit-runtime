@@ -59,6 +59,3 @@ class KotlinReplWrapper {
     fun eval(code: Code, jupyterId: Int = -1, storeHistory: Boolean = true) =
         repl.evalEx(EvalRequestData(code, jupyterId, storeHistory))
 }
-
-
-open class LocalRepositoryCoordinates(val string: String)
