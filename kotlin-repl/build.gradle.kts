@@ -6,8 +6,8 @@ plugins {
 
 	id("org.graalvm.buildtools.native") version "0.9.20"
 
-	kotlin("jvm") version "1.8.20-Beta"
-	kotlin("plugin.serialization") version "1.8.20-Beta"
+	kotlin("jvm") version "1.9.10"
+	kotlin("plugin.serialization") version "1.9.10"
 	kotlin("plugin.spring") version "1.7.22"
 	id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-337"
 }
