@@ -9,7 +9,7 @@ plugins {
 	kotlin("jvm") version "1.9.10"
 	kotlin("plugin.serialization") version "1.9.10"
 	kotlin("plugin.spring") version "1.7.22"
-	id("org.jetbrains.kotlin.jupyter.api") version "0.11.0-337"
+	id("org.jetbrains.kotlin.jupyter.api") version "0.12.0-51"
 }
 
 group = "org.clickprompt"
@@ -33,8 +33,8 @@ dependencies {
 	implementation("javax.websocket:javax.websocket-api:1.1")
 	implementation("org.springframework.boot:spring-boot-starter-websocket")
 
-	implementation("org.jetbrains.kotlinx:kotlin-jupyter-api:0.11.0-337")
-	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.11.0-337")
+	implementation("org.jetbrains.kotlinx:kotlin-jupyter-api:0.12.0-51")
+	implementation("org.jetbrains.kotlinx:kotlin-jupyter-kernel:0.12.0-51")
 
 	// Serverless Kotlin Language Binding
 	implementation(libs.kotless.lang)
