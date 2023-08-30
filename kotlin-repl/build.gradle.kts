@@ -49,7 +49,9 @@ dependencies {
 	implementation(libs.kotless.ktor.lang)
 	implementation(libs.kotless.ktor.lang.local)
 
-	implementation("com.h2database:h2:2.1.212")
+	implementation("org.jetbrains.lets-plot:lets-plot-kotlin-jvm:4.4.2")
+
+	implementation("com.h2database:h2:2")
 	implementation("mysql:mysql-connector-java:8.0.32")
 
 	// Database ORM
